@@ -1,0 +1,29 @@
+.createProduct {
+    height: 100vh; /* Koristi celo visine ekrana */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Postavlja inpute u kolonu */
+    padding: 20px; /* Dodaj padding oko elementa */
+}
+
+.createProduct input {
+    margin: 10px 0; /* Dodaj margine između inputa */
+    padding: 10px; /* Unutrašnja margina za inpute */
+    width: 300px; /* Postavi širinu inputa */
+    border: 1px solid #ccc; /* Dodaj ivicu za inpute */
+    border-radius: 5px; /* Zaobljeni ivice */
+}
+
+.createProduct button {
+    border-radius: 5px;
+    background-color: blue;
+    color: white;
+    padding: 10px;
+    width: 300px;
+}
+
+.createProduct button:hover {
+    background-color: rgb(66, 66, 186);
+}
+

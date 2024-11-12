@@ -1,0 +1,27 @@
+body {
+    height: 100vh;
+    overflow: hidden; /* Sprečava skrolovanje */
+}
+
+.login-page {
+    position: relative;
+    background-size: cover; /* Prilagođava sliku da pokrije celu stranicu */
+    background-position: center; /* Centriraj sliku */
+    background-repeat: no-repeat;
+}
+
+.login-form {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 50%; /* Centriraj formu vertikalno */
+    left: 50%; /* Centriraj formu horizontalno */
+    transform: translate(-50%, -50%); 
+    border-radius: 6px;/* Precizno centriranje */
+    background-color: rgb(134, 134, 134);
+    padding: 80px;
+}
+.login-form input, button {
+    margin-top: 5px;
+}
+
