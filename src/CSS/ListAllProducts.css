@@ -1,0 +1,55 @@
+.products {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: repeat(6,1fr);
+}
+.products img {
+    height: 200px;
+    width: 200px;
+}
+.products p {
+    display: flex;
+    flex-direction: column;
+}
+.products li {
+    margin-right: 5px;
+    background-color: white;
+    padding: 20px;
+}
+.search-buttons {
+    display: flex;
+    justify-content: space-between; /* Rasporedi dugmadi i input na početak i kraj */
+    align-items: center; /* Vertikalno poravnanje */
+}
+.search-container {
+    display: flex;
+    align-items: center; /* Poravnava input i dugme */
+    width: 100%; /* Obezbeđuje da ceo div zauzima raspoloživi prostor */
+}
+.search-buttons input,
+.search-buttons button {
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid #000;
+    font-size: 16px;
+}
+
+.submit-product {
+    cursor: pointer;
+    color: white;
+    background-color: black;
+}
+
+.refresh-button {
+    color: white;
+    background-color: black;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.refresh-button:hover {
+    color: black;
+    background-color: rgb(255, 255, 255);
+}

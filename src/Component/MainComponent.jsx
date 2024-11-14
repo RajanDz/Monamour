@@ -2,6 +2,7 @@ import '../CSS/Main.css'
 import { useState } from 'react';
 import { useUser } from './UserContext';
 import { Link } from 'react-router-dom';
+import { ListAllProduct } from './ListAllProductComponent';
 export const MainComponent = () => {
     const { user } = useUser();
     const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +39,6 @@ export const MainComponent = () => {
                         </div>
                     )}
                 </div>
-                
             ) : (
                 <h1>Please login</h1>
             )}
@@ -59,9 +59,11 @@ export const MainComponent = () => {
 
                 </ul>
             </div>
+            
             )}
-              
-
+              <div className='all-products'>
+                        <ListAllProduct />
+                    </div>
         </div>
     );
 };

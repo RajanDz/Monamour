@@ -8,6 +8,7 @@ export const LoginComponent = () => {
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     const { loginUser } = useUser();
+    const [errorMessage,setErrorMessage] = useState("");
     const navigate = useNavigate();
     const handleInputChange = (event) => {
         setEmail(event.target.value);
@@ -33,9 +34,11 @@ export const LoginComponent = () => {
                 navigate('/')
                 return data; // Vraća podatke o korisniku
             } else {
+                setErrorMessage("Invalid credentials. Please try again."); // Poruka o grešci
                 console.error("Login failed:", data.message);
             }
         } catch (error) {
+            setErrorMessage("Network or server error. Please try again later."); // Network greška
             console.error("Network or server error:", error);
         }
     } 
@@ -60,7 +63,11 @@ export const LoginComponent = () => {
                 onChange={(e) => handleInputPassword(e)}
                 />
                 <button onClick={handleSubmit}>Potvrdi</button>
+                {errorMessage && (
+                <div className='error-message'>{errorMessage}</div>
+            )}
             </div>
+            
         </div>
     )
 }

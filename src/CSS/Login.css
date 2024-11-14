@@ -1,6 +1,5 @@
 body {
     height: 100vh;
-    overflow: hidden; /* Sprečava skrolovanje */
 }
 
 .login-page {
@@ -8,8 +7,11 @@ body {
     background-size: cover; /* Prilagođava sliku da pokrije celu stranicu */
     background-position: center; /* Centriraj sliku */
     background-repeat: no-repeat;
-}
+    overflow: hidden;
 
+}
+.login-page img {
+}
 .login-form {
     position: absolute;
     display: flex;
@@ -24,4 +26,12 @@ body {
 .login-form input, button {
     margin-top: 5px;
 }
-
+.error-message {
+    color: rgb(255, 254, 254);
+    background-color: black;
+    padding: 10px;
+    margin-top: 10px; /* Dodaje razmak ispod dugmeta */
+    border-radius: 5px;
+    text-align: center;
+    z-index: 10; /* Veći z-index osigurava da bude ispred pozadinske slike */
+}

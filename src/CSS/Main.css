@@ -63,3 +63,9 @@ ul {
     color: black;
     text-decoration: none;
 }
+
+.all-products {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
