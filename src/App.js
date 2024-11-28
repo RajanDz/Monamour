@@ -5,16 +5,19 @@ import { MainComponent } from './Component/MainComponent';
 import { ListAllProduct } from './Component/ListAllProductComponent';
 import { CreateProduct } from './Component/CreateProductComponent';
 import { UserProvider } from './Component/UserContext';
+import { Dashboard } from './Component/DashboardComponent';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 function App() {
   return (
-    <UserProvider> {/* Ovdje obavezujemo UserProvider */}
+    <UserProvider>{/* Ovdje obavezujemo UserProvider */}
       <Router>
+      <MainComponent></MainComponent>
+
         <Routes>
+          <Route path='/' element={<Dashboard></Dashboard>}></Route>
           <Route path="/login" element={<LoginComponent />} />
-          <Route path='/products' element={<ListAllProduct/>}></Route>
           <Route path='/createProduct' element={<CreateProduct/>}></Route>
-          <Route path="/" element={<MainComponent />} />
+          <Route path="/products" element={<ListAllProduct />} />
         </Routes>
       </Router>
     </UserProvider>

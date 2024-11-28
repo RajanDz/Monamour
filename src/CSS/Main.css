@@ -1,71 +1,53 @@
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #f4ebd7;
+/* Navigacioni bar */
+.nav-bar {
+    position: fixed;
+    top: 0;
+    left: -180px; /* Skriven deo bara */
+    width: 200px;
+    height: 100%;
+    background-color: #2c3e50;
+    transition: left 0.3s ease;
+    z-index: 1000;
 }
-ul {
-    list-style-type: none; /* Uklanja kružiće */
-}
-.menu {
-    display: flex;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: rgb(99, 99, 232);
-}
-.user-details  {
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-}
-.user-details h1 {
-    display: flex;
-    justify-content: flex-end;
-    margin-right: 10px;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: rgb(99, 99, 232);
-}
-.user-details h1:hover {
-    color: rgb(77, 77, 77);
-}
-.user-details a {
-    color: black;
-    text-decoration: none;
-}
-.dropdown-menu {
-    display: none; /* Početno sakriven */
+
+/* Dodaj vidljivu ivicu */
+.nav-bar::before {
+    content: "";
     position: absolute;
-    top: 100%; /* Pozicionira ispod h1 */
-    right: 5px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    top: 0;
+    right: -20px; /* Vidljivi deo */
+    width: 20px;
+    height: 100%;
+    background-color: #34495e; /* Tamnija boja za vizuelni kontrast */
 }
 
- .user-details h1 + .dropdown-menu {
-    display: flex;
-    flex-direction: column;
-}
-.section {
-    max-width: 1200px; /* Maksimalna širina sekcije, prilagodi vrednost po potrebi */
-    width: 10%; /* Možeš da postaviš širinu na 100% da zauzima ceo raspoloživi prostor, ali sa max-width */
-    padding: 20px; /* Padding oko sadržaja */
-    background-color: aliceblue; /* Pozadinska boja sekcije */
+/* Kada korisnik pređe mišem preko navigacionog bara */
+.nav-bar:hover {
+    left: 0; /* Otvara bar */
 }
 
-.section a{
-    display: flex;
-    border: 1px solid black;
-    background-color: aliceblue;
-    margin-top: 12px;
+/* Stilovi za linkove */
+.nav-bar ul {
+    list-style: none;
+    margin: 0;
+    padding: 20px 0;
+}
+
+.nav-bar li {
+    margin: 15px 0;
     padding: 10px;
-    color: black;
+    text-align: center;
+}
+
+.nav-bar a {
     text-decoration: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+    transition: color 0.2s;
 }
 
-.all-products {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.nav-bar a:hover {
+    color: #f39c12;
 }

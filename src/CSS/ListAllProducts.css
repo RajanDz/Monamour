@@ -1,55 +1,149 @@
+/* Generalna stilizacija stranice */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Stilizacija za proizvode */
 .products {
     display: grid;
-    align-items: center;
-    justify-content: center;
-    grid-template-columns: repeat(6,1fr);
+    gap: 20px; /* Razmak između proizvoda */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Automatsko prilagođavanje */
+    margin: 20px;
+    padding: 0;
+    list-style: none; /* Uklanja tačke sa liste */
 }
-.products img {
-    height: 200px;
-    width: 200px;
-}
-.products p {
-    display: flex;
-    flex-direction: column;
-}
+
 .products li {
-    margin-right: 5px;
-    background-color: white;
-    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Dodaje efekat senke */
+    text-align: center;
+    padding: 15px;
+    transition: transform 0.3s ease; /* Animacija na hover */
 }
+
+.products li:hover {
+    transform: translateY(-5px); /* Blagi efekat podizanja na hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Jača senka na hover */
+}
+
+.products img {
+    height: 150px;
+    width: auto; /* Automatsko prilagođavanje širine */
+    border-radius: 5px; /* Zaobljeni uglovi slike */
+    margin-bottom: 10px;
+}
+
+.products p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Stilizacija pretrage i dugmadi */
 .search-buttons {
     display: flex;
-    justify-content: space-between; /* Rasporedi dugmadi i input na početak i kraj */
-    align-items: center; /* Vertikalno poravnanje */
+    justify-content: space-between; /* Dugmad na različitim krajevima */
+    align-items: center;
+    padding: 20px;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: sticky; /* Lepljivo na vrhu stranice */
+    top: 0;
+    z-index: 999;
+}
+.products-buttons  button{
+    margin-left: 5px;
 }
 .search-container {
     display: flex;
-    align-items: center; /* Poravnava input i dugme */
-    width: 100%; /* Obezbeđuje da ceo div zauzima raspoloživi prostor */
-}
-.search-buttons input,
-.search-buttons button {
-    height: 40px;
-    padding: 0 10px;
-    border: 1px solid #000;
-    font-size: 16px;
+    gap: 10px; /* Razmak između inputa i dugmeta */
 }
 
-.submit-product {
+.search-buttons input {
+    height: 40px;
+    padding: 0 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 300px; /* Širina input polja */
+}
+
+.search-buttons button {
+    height: 40px;
+    padding: 0 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
     cursor: pointer;
     color: white;
-    background-color: black;
+    background-color: #007bff; /* Plava boja */
+    transition: background-color 0.3s ease;
+}
+
+.search-buttons button:hover {
+    background-color: #0056b3; /* Tamnija plava na hover */
 }
 
 .refresh-button {
+    height: 40px;
+    border: none;
+    border-radius: 5px;
     color: white;
-    background-color: black;
-    padding: 10px;
-    border-radius: 10px;
+    background-color: #28a745; /* Zelena boja */
+    padding: 0 15px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .refresh-button:hover {
-    color: black;
-    background-color: rgb(255, 255, 255);
+    background-color: #218838; /* Tamnija zelena na hover */
+}
+
+/* Navbar prilagodba */
+.side-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 50px; /* Početna širina navbar-a */
+    background-color: #2c3e50;
+    color: white;
+    transition: width 0.3s ease;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.side-navbar.open {
+    width: 200px; /* Proširi navbar na hover */
+}
+
+.side-navbar ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.side-navbar li {
+    padding: 15px;
+    border-bottom: 1px solid #34495e;
+}
+
+.side-navbar li a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.side-navbar li:hover {
+    background-color: #1abc9c; /* Svetlija zelena */
+}
+
+.side-navbar li a:hover {
+    color: #34495e; /* Tamnija boja linka */
 }

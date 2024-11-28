@@ -7,9 +7,9 @@ export const CreateProduct = () => {
     const [size, setSize] = useState("");
     const [image, setImage] = useState("");
     const [price, setPrice] = useState("");
+    const [message,setMessage] = useState("");
 
-
-    async function createProduct(params) {
+    async function createProduct() {
         try {
             const response = await fetch('http://localhost:8080/api/createProduct',{
                 method: 'POST',
@@ -21,8 +21,11 @@ export const CreateProduct = () => {
             const data = await response.json();
             if (response.ok){
                 console.log(`Product with name ${name} is created`)
+                setMessage(`You have successfully added a product.  ${name}`);
+                return data;
             } else {
-                console.log(`Product with name ${name} is  failed to created`)
+                console.log(`Product with name ${name} is  failed to created`);
+                setMessage(`Product with name ${name} is  failed to created`);
 
             }
         } catch (error) {
@@ -78,6 +81,8 @@ export const CreateProduct = () => {
             </div>
 
             <button onClick={createProduct}>Submit</button>
+
+            {message && <p className='message'>{message}</p>}
         </div>
     );
 };

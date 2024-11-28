@@ -1,0 +1,107 @@
+/* Navigacioni bar */
+.nav-bar {
+    position: fixed;
+    top: 0;
+    left: -180px; /* Skriven deo bara */
+    width: 200px;
+    height: 100%;
+    background-color: #2c3e50;
+    transition: left 0.3s ease;
+    z-index: 1000;
+}
+
+/* Dodaj vidljivu ivicu */
+.nav-bar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -20px; /* Vidljivi deo */
+    width: 20px;
+    height: 100%;
+    background-color: #34495e; /* Tamnija boja za vizuelni kontrast */
+}
+
+/* Kada korisnik pređe mišem preko navigacionog bara */
+.nav-bar:hover {
+    left: 0; /* Otvara bar */
+}
+
+/* Stilovi za linkove */
+.nav-bar ul {
+    list-style: none;
+    margin: 0;
+    padding: 20px 0;
+}
+
+.nav-bar li {
+    margin: 15px 0;
+    padding: 10px;
+    text-align: center;
+}
+
+.nav-bar a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+    transition: color 0.2s;
+}
+
+.nav-bar a:hover {
+    color: #f39c12;
+}
+
+/* Ostali sadržaj */
+/* Kontejner za detalje */
+.details-about-users {
+    background-color: #f8f9fa; /* Lagana siva boja za pozadinu */
+    padding: 20px;
+    border: 1px solid #e0e0e0; /* Suptilna granica */
+    border-radius: 15px; /* Zaobljeni uglovi */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Efekat sjene */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dve kolone */
+    gap: 20px; /* Razmak između elemenata */
+    margin-top: 30px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Stilovi za pojedinačne kartice */
+.user-detail, .product-detail {
+    background-color: #ffffff; /* Bijela pozadina za kartice */
+    border: 1px solid #dedede; /* Suptilna granica */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Suptilna sjena */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efekti na hover */
+.user-detail:hover, .product-detail:hover {
+    transform: scale(1.03); /* Blago povećanje na hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Intenzivnija sjena */
+}
+
+/* Tekstualni elementi */
+.user-detail p, .product-detail p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #2c3e50; /* Tamnija boja za tekst */
+}
+
+/* Naslovi */
+.details-about-users h2 {
+    font-size: 24px;
+    color: #34495e; /* Tamnoplava boja */
+    margin-bottom: 20px;
+}
+
+/* Opšti stilovi */
+body {
+    background-color: #ecf0f1; /* Lagana pozadina za cijelu stranicu */
+    font-family: 'Roboto', sans-serif;
+    color: #2c3e50;
+    margin: 0;
+    padding: 20px;
+}

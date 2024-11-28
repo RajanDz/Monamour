@@ -17,53 +17,13 @@ export const MainComponent = () => {
 
     return (
         <div>
-            {user ? (
-                <div className='user-details'>
-                    <h1 className='menu' onClick={toggleNavBar}>Menu</h1>
-                    <h1 onClick={toggleDropdown}>{user.user.name}</h1> 
-                    {isOpen && (
-                        <div className='dropdown-menu'>
-                    <ul>
-                    <li>
-                        <Link to={'/profile'}>Profile</Link>
-                    </li>
-
-                    <li>
-                    <Link to={'/settings'}>Settings</Link>
-                    </li>
-
-                    <li>
-                    <Link to={'/logout'}>Logout</Link>
-                    </li>
-                    </ul>
-                        </div>
-                    )}
-                </div>
-            ) : (
-                <h1>Please login</h1>
-            )}
-            {isSectionOpen && (
-                <div className='section'>
+             <div className="nav-bar">
                 <ul>
                     <li>
-                        <Link to={'/products'}>Products</Link>
+                        <Link to="/products">Products</Link>
                     </li>
-
-                    <li>
-                    <Link to={'/users'}>Users</Link>
-                    </li>
-
-                    <li>
-                    <Link to={'/transaction'}>Transaction</Link>
-                    </li>
-
                 </ul>
             </div>
-            
-            )}
-              <div className='all-products'>
-                        <ListAllProduct />
-                    </div>
         </div>
     );
 };
