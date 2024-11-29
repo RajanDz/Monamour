@@ -18,6 +18,26 @@ export const ListAllProduct = () => {
     const toggleDeleteButton = () => {
         setDeleteButton(!deleteButton)
     }
+    async function deleteProduct(product_id) {
+        try {
+            const response = await fetch("http://localhost:8080/api/deleteOneProduct",{
+                method: "POST",
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: user.user.id,
+                    product_id: product_id
+                })
+            })
+            if (response.ok){
+                const data = await response.json();
+                console.log("Succes");
+            }
+        } catch (error) {
+            console.error('There was an error!', error);
+        }
+    }
     async function deleteProducts() {
         console.log(user.user.id)
     
@@ -67,10 +87,10 @@ export const ListAllProduct = () => {
         }
 }
 
-const searchProduct = () => {
-const filteredProducts = products.filter(product  => product.name.toLowerCase().includes(productName.toLowerCase()));
-setProducts(filteredProducts);
-}
+    const searchProduct = () => {
+    const filteredProducts = products.filter(product  => product.name.toLowerCase().includes(productName.toLowerCase()));
+    setProducts(filteredProducts); 
+    }
 useEffect(() => {
     if (!user){
         console.log("You need to be logged in to acces this page");
@@ -84,22 +104,23 @@ useEffect(() => {
 return (
     <div>
       <div className='search-buttons'>
-    <div className='search-container'>
-        <input
+
+        <div className='search-container'>
+            <input
             type="text"
             placeholder='name'
             onChange={(e) => setProductName(e.target.value)}
-        />
-        <button className='submit-product' onClick={searchProduct}>Submit</button>
-    </div>
-
-        <div className='products-buttons'>
-    <Link to={'/createProduct'}>
-    <button>Create products</button>
-    </Link>
-    <button onClick={toggleDeleteButton}>Delete products</button>
-    <button className='refresh-button' onClick={getAllProducts}>Refresh Products</button>
+            />
+            <button className='submit-product' onClick={searchProduct}>Submit</button>
         </div>
+
+    <div className='products-buttons'>
+            <Link to={'/createProduct'}>
+                <button>Create products</button>
+            </Link>
+             <button onClick={toggleDeleteButton}>Delete products</button>
+            <button className='refresh-button' onClick={getAllProducts}>Refresh Products</button>
+    </div>
 
     {deleteButton && (
     <div className='deleteProducts'>
@@ -121,9 +142,10 @@ return (
         <ul className='products'>
             {products.map((product, index) => (
                 <li key={index}>
-                    <p>{product.name}</p>
-                    <p>{product.price}</p>
+                    <p>Name: {product.name}</p>
+                    <p>Cijena: {product.price}</p>
                     <img className='img' src={product.image} alt="error" />
+                    <button onClick={() => deleteProduct(product.id)}>Delete</button>
                 </li>
             ))}
         </ul>

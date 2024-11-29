@@ -21,9 +21,22 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Dodaje efekat senke */
     text-align: center;
     padding: 15px;
-    transition: transform 0.3s ease; /* Animacija na hover */
-}
+    transition: transform 0.3s ease;
+    display: flex; /* Animacija na hover */
+    flex-direction: column;
 
+}
+.products li button {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px;
+}
+.products li button:hover {
+    background-color: rgb(196, 87, 87);
+}
 .products li:hover {
     transform: translateY(-5px); /* Blagi efekat podizanja na hover */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Jača senka na hover */

@@ -26,7 +26,6 @@ export const CreateProduct = () => {
             } else {
                 console.log(`Product with name ${name} is  failed to created`);
                 setMessage(`Product with name ${name} is  failed to created`);
-
             }
         } catch (error) {
             console.error("Login failed:");
