@@ -26,7 +26,7 @@ body {
     flex-direction: column;
 
 }
-.products li button {
+.delete-button {
     background-color: red;
     color: white;
     border: none;
@@ -34,8 +34,20 @@ body {
     cursor: pointer;
     padding: 10px;
 }
-.products li button:hover {
+.edit-button {
+    background-color: rgb(59, 192, 41);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+}
+.delete-button:hover {
     background-color: rgb(196, 87, 87);
+}
+.edit-button:hover{
+    background-color: #218838;
 }
 .products li:hover {
     transform: translateY(-5px); /* Blagi efekat podizanja na hover */
@@ -43,7 +55,7 @@ body {
 }
 
 .products img {
-    height: 150px;
+    height: 300px;
     width: auto; /* Automatsko prilagođavanje širine */
     border-radius: 5px; /* Zaobljeni uglovi slike */
     margin-bottom: 10px;
@@ -68,12 +80,14 @@ body {
     top: 0;
     z-index: 999;
 }
+
 .products-buttons  button{
     margin-left: 5px;
 }
 .search-container {
     display: flex;
-    gap: 10px; /* Razmak između inputa i dugmeta */
+    align-items: center;
+    gap: 6px; /* Razmak između inputa i dugmeta */
 }
 
 .search-buttons input {
@@ -96,7 +110,9 @@ body {
     background-color: #007bff; /* Plava boja */
     transition: background-color 0.3s ease;
 }
-
+.search-buttons .search-container, .products-buttons {
+    margin-left: 25px;
+}
 .search-buttons button:hover {
     background-color: #0056b3; /* Tamnija plava na hover */
 }

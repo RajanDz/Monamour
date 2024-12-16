@@ -1,0 +1,102 @@
+/* Globalne postavke za body */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+}
+
+/* Glavni kontejner koji sadrži oba dela */
+.product-details-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    width: 100%;
+}
+
+/* Stil za deo sa informacijama o proizvodu */
+.product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+/* Stil za slike proizvoda */
+.product-info img {
+    width: 70%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Stil za detalje proizvoda (tekst) */
+.product-info h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.product-info p {
+    font-size: 1rem;
+    color: #333;
+}
+
+.product-info strong {
+    font-weight: bold;
+}
+
+/* Formular za editovanje proizvoda */
+.details {
+    flex: 1;
+    max-width: 450px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Input polja */
+.details input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* Stil za dugme */
+.details button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.details button:hover {
+    background-color: #45a049;
+}
+
+/* Poruke (uspeh i greške) */
+.message {
+    margin-top: 10px;
+    color: red;
+    font-size: 1rem;
+}
+
+.message.success {
+    color: green;
+}

@@ -85,7 +85,7 @@ export const ListAllProduct = () => {
         } catch (error) {
             console.error('There was an error!', error);
         }
-}
+    }
 
     const searchProduct = () => {
     const filteredProducts = products.filter(product  => product.name.toLowerCase().includes(productName.toLowerCase()));
@@ -116,9 +116,12 @@ return (
 
     <div className='products-buttons'>
             <Link to={'/createProduct'}>
-                <button>Create products</button>
+                <button className='create-button'>Create products</button>
             </Link>
              <button onClick={toggleDeleteButton}>Delete products</button>
+             <Link to={'/auditLogs'}>
+             <button>Audit Logs</button>
+             </Link>
             <button className='refresh-button' onClick={getAllProducts}>Refresh Products</button>
     </div>
 
@@ -143,9 +146,12 @@ return (
             {products.map((product, index) => (
                 <li key={index}>
                     <p>Name: {product.name}</p>
-                    <p>Cijena: {product.price}</p>
+                    <p>Cijena: {product.price}e</p>
                     <img className='img' src={product.image} alt="error" />
-                    <button onClick={() => deleteProduct(product.id)}>Delete</button>
+                    <Link to={`/productDetails/${product.id}`}>
+                    <button className='edit-button'>Edit</button>
+                    </Link>
+                    <button className='delete-button' onClick={() => deleteProduct(product.id)}>Delete</button>
                 </li>
             ))}
         </ul>

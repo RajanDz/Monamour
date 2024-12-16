@@ -72,7 +72,7 @@ export const CreateProduct = () => {
 
             <div>
                 <input 
-                    type="number" // Koristimo type="number" za unos cene
+                    type="text" // Koristimo type="number" za unos cene
                     value={price}
                     onChange={(e) => setPrice(e.target.value)} // Ažurira stanje za price
                     placeholder="Price"
@@ -81,7 +81,7 @@ export const CreateProduct = () => {
 
             <button onClick={createProduct}>Submit</button>
 
-            {message && <p className='message'>{message}</p>}
+            {message && <p className='response-message'>{message}</p>}
         </div>
     );
 };
