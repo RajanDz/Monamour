@@ -5,6 +5,7 @@ import { MainComponent } from './Component/MainComponent';
 import { ListAllProduct } from './Component/ListAllProductComponent';
 import { CreateProduct } from './Component/CreateProductComponent';
 import { UserProvider } from './Component/UserContext';
+import { UserDetails } from './Component/UserDetails';
 import { ProductDetails } from './Component/ProductDetails';
 import { Dashboard } from './Component/DashboardComponent';
 import { AuditLogsComponent } from './Component/AuditLogsComponent';
@@ -22,6 +23,7 @@ function App() {
           <Route path="/products" element={<ListAllProduct />} />
           <Route path='/productDetails/:id' element={<ProductDetails></ProductDetails>}></Route>
           <Route path='/auditLogs' element={<AuditLogsComponent/>}></Route>
+          <Route path='/user/:id' element={<UserDetails/>}></Route>
         </Routes>
       </Router>
     </UserProvider>

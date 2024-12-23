@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+      name: MySQL Connection
+      url: jdbc:mysql://localhost:3306/monamour
+      username: root
+      password: rajan123
+      driver-class-name: com.mysql.cj.jdbc.Driver
+jpa:
+  show-sql: true
+  ddl-auto: update
