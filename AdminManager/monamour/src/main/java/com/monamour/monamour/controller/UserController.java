@@ -13,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 
 @RestController()
@@ -29,6 +31,12 @@ public class UserController {
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
+    }
+    @PostMapping("/testUpload")
+    public ResponseEntity<String> testUpload(@RequestParam("file") MultipartFile file) throws IOException {
+            String fName = file.getOriginalFilename();
+            file.transferTo(new File("D:\\Upload\\" + fName));
+            return ResponseEntity.ok("Uploaded");
     }
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(
@@ -68,16 +76,15 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}/profile-image")
-    public ResponseEntity<byte[]> getProfileImage(@PathVariable Integer id) {
+    public ResponseEntity<String> getProfileImage(@PathVariable Integer id) {
         byte[] image = userService.getProfileImage(id);
 
         if (image == null) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(image);
+        String base64Image = "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(image);
+        return ResponseEntity.ok(base64Image);
     }
 
 }

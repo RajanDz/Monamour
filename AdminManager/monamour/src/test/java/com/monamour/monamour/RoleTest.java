@@ -19,8 +19,8 @@ public class RoleTest {
     @Test
     void createRole() {
         Role role = new Role();
-        role.setName("Manager");
-        role.setDescription("Manager is the one who can control all the features in app and manage them");
+        role.setName("Emplooyer");
+        role.setDescription("This role need to manage galery for photos on the site and create products to be available to the customer.");
         roleRepo.save(role);
     }
 }

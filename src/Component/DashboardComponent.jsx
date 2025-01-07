@@ -41,6 +41,7 @@ export const Dashboard = () => {
     useEffect(() => {
         fetchAllUsers();
         fetchAllProducts();
+        console.log(totalUsers)
     }, []);
 
     return (

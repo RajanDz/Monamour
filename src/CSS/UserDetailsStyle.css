@@ -88,3 +88,125 @@ body {
     background-color: white;
     color: black;
 }
+.roles-dashboard {
+    display: flex;
+    margin-top: 150px;
+    position: absolute;
+    justify-content: flex-start;
+    flex-direction: column;
+    background-color: rgb(179, 176, 176);
+    color: rgb(13, 13, 13);
+    padding: 20px; /* Dodat prostor unutar elementa */
+    border-radius: 5px; /* Zaobljeni uglovi */
+    font-size: 18px; 
+    height: 700px;
+    width: 700px;
+}
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+}
+.title h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px; /* Razmak ispod naslova */
+    font-size: 24px;
+    font-weight: bold;
+    flex-grow: 1;
+}
+.title button {
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+.roles-list {
+   width: 100%;
+}
+
+.user-roles {
+    display: flex;
+    align-items: center;
+    border: 1px solid black;
+    cursor: pointer;
+    width: 100%;
+}
+
+.role-item {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 10px;
+}
+.roles-list li {
+    margin-bottom: 10px;
+}
+.roles-manager-buttons {
+    display: flex;
+    position: relative;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+.roles-manager-buttons button {
+    border: none;
+    background-color: black;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+}
+.roles-manager-button, .user-roles {
+    margin-bottom: 20px;
+}
+.roles-to-add {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: absolute;  /* Apstraktna pozicija u odnosu na roditelja */
+    left: 20%;          /* Postavi element desno od dugmeta */
+    top: 0;              /* Poravnaj ga na vrh dugmeta */
+    margin-left: 10px;
+    background-color: rgb(0, 0, 0);
+    height: 220px;
+    width: 260px;
+    border-radius: 5px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+.roles-to-add p {
+    display: flex;
+    color: white;
+    cursor: pointer;
+    font-size: 17px;
+}
+.roles-to-add button {
+    margin-right: auto;
+}
+.role {
+    display: flex; /* Fleksibilno pozicioniranje za paragraf i dugme */
+    justify-content: space-between; /* Razmak između paragrafa i dugmeta */
+    align-items: center; /* Poravnanje po vertikali */
+    padding: 10px; /* Dodatno razdvajanje unutar elementa */
+    width: 80%; /* Osigurava da zauzima celu širinu roditelja */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-sizing: border-box; /* Uključuje padding u ukupnu širinu */
+    /* Opcioni razdvajanje elemenata */
+}
+.role p {
+    margin: 0; /* Uklonite podrazumevane margine */
+    color: white;
+    font-size: 17px;
+    flex-grow: 1;
+}
+
+.role button {
+    background-color: rgb(50, 50, 50); /* Boja dugmeta */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
