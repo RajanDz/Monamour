@@ -95,7 +95,7 @@ public class ProductService {
 
             ProductImages productImages1 = new ProductImages();
             productImages1.setProduct(product);
-            productImages1.setImagePath("/Galerija/" + fileName);
+            productImages1.setImagePath(fileName);
             productImages.add(productImages1);
 
         }
