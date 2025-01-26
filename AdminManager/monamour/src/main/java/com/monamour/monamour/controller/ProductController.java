@@ -11,7 +11,9 @@ import com.monamour.monamour.service.ProductService;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +50,18 @@ public class ProductController {
         Map<String,String> response = productService.deleteProductById(productsDeleteProcces);
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/productsImage/{id}")
+    public ResponseEntity<List<String>> getProductImage(@PathVariable Integer id) throws IOException {
+        List<String> image = productService.getProductImages(id);
+        return ResponseEntity.ok(image);
+    }
     @PostMapping("/createProduct")
-    public ResponseEntity<Product> createProduct (@RequestBody ProductCreate productCreate) {
-        Product product = productService.createProduct(productCreate);
+    public ResponseEntity<Product> createProduct (@RequestParam(name = "name") String name,
+                                                  @RequestParam("color") String color,
+                                                  @RequestParam(name = "size") String size,
+                                                  @RequestParam("price") Double price,
+                                                  @RequestParam("images")MultipartFile [] images) throws IOException{
+        Product product = productService.createProduct(name,color,size,price,images);
         return ResponseEntity.ok(product);
     }
     @PostMapping("/editProductDetaoils")

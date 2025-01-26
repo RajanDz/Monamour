@@ -4,7 +4,10 @@ package com.monamour.monamour.controller;
 import com.monamour.monamour.dto.LoginCredentials;
 import com.monamour.monamour.dto.LoginResponse;
 import com.monamour.monamour.dto.Registration;
+import com.monamour.monamour.dto.UserDetailsEdit;
 import com.monamour.monamour.entities.User;
+import com.monamour.monamour.entities.UserLog;
+import com.monamour.monamour.service.RoleService;
 import com.monamour.monamour.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,7 +48,7 @@ public class UserController {
             @RequestParam String email,
             @RequestParam String phoneNumber,
             @RequestParam String password,
-            @RequestParam MultipartFile profileImage) {
+            @RequestParam String gender) {
 
         Registration registration = new Registration();
         registration.setName(name);
@@ -53,9 +56,9 @@ public class UserController {
         registration.setEmail(email);
         registration.setPhoneNumber(phoneNumber);
         registration.setPassword(password);
-
+        registration.setGender(gender);
         try {
-            String result = userService.registration(registration, profileImage);
+            String result = userService.registration(registration);
             return ResponseEntity.ok(result);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while saving user.");
@@ -74,19 +77,19 @@ public class UserController {
         User user = userService.findById(id);
         return ResponseEntity.ok(user);
     }
-
-    @GetMapping("/user/{id}/profile-image")
+    @GetMapping("/user/profile-image/{id}")
     public ResponseEntity<String> getProfileImage(@PathVariable Integer id) {
-        byte[] image = userService.getProfileImage(id);
-
-        if (image == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        String base64Image = "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(image);
-        return ResponseEntity.ok(base64Image);
+            String getImage = userService.getProfileImage(id);
+            return ResponseEntity.ok(getImage);
     }
-
+    @PostMapping("/editUserDetails")
+    public ResponseEntity<User> editUserDetails(@RequestBody UserDetailsEdit userDetailsEdit) {
+            User userDetailsEdit1 = userService.editUserDetails(userDetailsEdit);
+            return ResponseEntity.ok(userDetailsEdit1);
+    }
+    @GetMapping("/userLog/{id}")
+    public ResponseEntity<UserLog> userActivity(@PathVariable Integer id) {
+        UserLog userLog = userService.userLog(id);
+        return ResponseEntity.ok(userLog);
+    }
 }
-
-

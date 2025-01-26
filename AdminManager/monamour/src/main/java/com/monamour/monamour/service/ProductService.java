@@ -5,13 +5,22 @@ import com.monamour.monamour.dto.ProductCreate;
 import com.monamour.monamour.dto.ProductDetails;
 import com.monamour.monamour.dto.ProductsDeleteProcces;
 import com.monamour.monamour.entities.Product;
+import com.monamour.monamour.entities.ProductImages;
 import com.monamour.monamour.entities.ProductsActivityLog;
 import com.monamour.monamour.entities.User;
+import com.monamour.monamour.repository.ProductImagesRepo;
 import com.monamour.monamour.repository.ProductRepo;
 import com.monamour.monamour.repository.ProductsActivityLogRepo;
 import com.monamour.monamour.repository.UserRepo;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -21,10 +30,13 @@ public class ProductService {
     private final ProductRepo productRepo;
     private final ProductsActivityLogRepo productsActivityLogRepo;
     private final UserRepo userRepo;
-    public ProductService(ProductRepo productRepo, ProductsActivityLogRepo productsActivityLogRepo, UserRepo userRepo) {
+    private final ProductImagesRepo productImagesRepo;
+    private final String defaultPath = "C:/Users/Rajan/Desktop/Galerija/productPhotos";
+    public ProductService(ProductRepo productRepo, ProductsActivityLogRepo productsActivityLogRepo, UserRepo userRepo, ProductImagesRepo productImagesRepo) {
         this.productRepo = productRepo;
         this.productsActivityLogRepo = productsActivityLogRepo;
         this.userRepo = userRepo;
+        this.productImagesRepo = productImagesRepo;
     }
     public List<Product> getAllProducts() {
         return productRepo.findAllActiveProduct();
@@ -66,17 +78,42 @@ public class ProductService {
         response.put("message", "Products are deleted");
         return response;
     }
-    public Product createProduct(ProductCreate productCreate){
+    public Product createProduct(String name, String color, String size, Double price, MultipartFile [] images) throws IOException {
         Product product = new Product();
-        product.setName(productCreate.getName());
-        product.setColor(productCreate.getColor());
-        product.setSize(productCreate.getSize());
-        product.setImage(productCreate.getImage());
-        product.setPrice(productCreate.getPrice());
+        product.setName(name);
+        product.setColor(color);
+        product.setSize(size);
+        product.setPrice(price);
         product.setIsDeleted(false);
-        return productRepo.save(product);
-    }
+        productRepo.save(product);
 
+        List<ProductImages> productImages = new ArrayList<>();
+        for (MultipartFile file : images){
+            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            Path filePath = Paths.get(defaultPath,fileName);
+            Files.copy(file.getInputStream(), filePath);
+
+            ProductImages productImages1 = new ProductImages();
+            productImages1.setProduct(product);
+            productImages1.setImagePath("/Galerija/" + fileName);
+            productImages.add(productImages1);
+
+        }
+        productImagesRepo.saveAll(productImages);
+        return product;
+    }
+    public List<String> getProductImages(Integer product_id) throws IOException {
+        List<ProductImages> productImages = productImagesRepo.findByProductId(product_id);
+        List<String> base64Images = new ArrayList<>();
+        for (ProductImages productImages2: productImages){
+            File file = new File( productImages2.getImagePath());
+            System.out.println("File path: " + file.getAbsolutePath()); // Logovanje putanje
+            byte[] imageBytes = Files.readAllBytes(file.toPath());
+            String base64Image = "data:image/png;base64," + Base64.getEncoder().encodeToString(imageBytes);
+            base64Images.add(base64Image);
+        }
+        return base64Images.isEmpty() ? null : base64Images;
+    }
     public Product editProductDetails (ProductDetails productDetails){
         Optional<Product> findProduct = productRepo.findById(productDetails.getId());
         if (findProduct.isPresent()) {
@@ -91,9 +128,6 @@ public class ProductService {
                 product.setSize(productDetails.getSize());
             } else {
                 throw new RuntimeException("Size can not be null");
-            }
-            if (productDetails.getImage() != null && !productDetails.getImage().isEmpty()){
-                product.setImage(productDetails.getImage());
             }
             if (productDetails.getPrice() != null){
                 product.setPrice(productDetails.getPrice());
