@@ -30,7 +30,9 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
     @Column(name = "profile_image")
-    private byte[] profileImage;
+    private String profileImage;
+    @Column(name = "gender")
+    private String gender;
 
         @ManyToMany(fetch = FetchType.EAGER)
         @JoinTable(name = "user_role",
