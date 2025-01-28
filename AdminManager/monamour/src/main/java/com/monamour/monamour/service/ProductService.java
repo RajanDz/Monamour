@@ -95,7 +95,7 @@ public class ProductService {
 
             ProductImages productImages1 = new ProductImages();
             productImages1.setProduct(product);
-            productImages1.setImagePath(fileName);
+            productImages1.setImagePath(filePath.toString());
             productImages.add(productImages1);
 
         }
@@ -106,8 +106,8 @@ public class ProductService {
         List<ProductImages> productImages = productImagesRepo.findByProductId(product_id);
         List<String> base64Images = new ArrayList<>();
         for (ProductImages productImages2: productImages){
-            File file = new File( productImages2.getImagePath());
-            System.out.println("File path: " + file.getAbsolutePath()); // Logovanje putanje
+            File file = new File(productImages2.getImagePath());
+            System.out.println("File path: " + file.getAbsolutePath());
             byte[] imageBytes = Files.readAllBytes(file.toPath());
             String base64Image = "data:image/png;base64," + Base64.getEncoder().encodeToString(imageBytes);
             base64Images.add(base64Image);
