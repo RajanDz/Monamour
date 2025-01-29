@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useUser } from "./UserContext";
 import { useNavigate } from "react-router-dom";
+import { da } from 'date-fns/locale';
 
 export const ProductDetails = () => {
     const { user } = useUser();
@@ -13,7 +14,7 @@ export const ProductDetails = () => {
     const [name, setName] = useState("");
     const [color, setColor] = useState("");
     const [size, setSize] = useState("");
-    const [image, setImage] = useState("");
+    const [images, setImages] = useState([]);
     const [price, setPrice] = useState("");
     const [message, setMessage] = useState(""); // Poruka za korisnika
 
@@ -32,7 +33,6 @@ export const ProductDetails = () => {
                 setName(data.name);
                 setColor(data.color);
                 setSize(data.size);
-                setImage(data.image);
                 setPrice(data.price);
             } else {
                 setMessage("Failed to load product details.");
@@ -41,6 +41,31 @@ export const ProductDetails = () => {
             setMessage("There was an error loading the product.");
         }
     }
+
+    async function getProductImages() {
+        try {
+            const response = await fetch(`http://localhost:8080/api/productsImage/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+            });
+    
+            if (response.ok) {
+                const data = await response.json(); // Pozivanje json() funkcije
+                console.log('Recived data: ',data);
+                setImages((prevImages) => {
+                    const uniqueImages = new Set([...prevImages,...data])
+                    return Array.from(uniqueImages);
+                }); // Ispravna logika za ažuriranje stanja
+            } else {
+                console.log("Error happened while trying to get product images");
+            }
+        } catch (error) {
+            console.log("Error happened: ", error);
+        }
+    }
+    
     async function editProductDetails() {
         try {
             const response = await fetch('http://localhost:8080/api/editProductDetaoils', {
@@ -54,7 +79,6 @@ export const ProductDetails = () => {
                     color: color,
                     size: size,
                     price: price,
-                    image: image
                 })
             })
             if (response.ok){
@@ -73,6 +97,7 @@ export const ProductDetails = () => {
             navigate('/login');
         } else {
             fetchProductDetails();
+            getProductImages();
         }
     }, [user, navigate]);
 
@@ -85,7 +110,15 @@ export const ProductDetails = () => {
                         <p><strong>Color:</strong> {product.color}</p>
                         <p><strong>Size:</strong> {product.size}</p>
                         <p><strong>Price:</strong> ${product.price}</p>
-                        <img src={product.image} alt={product.name} />
+                    <div className="product-images">
+                         <ul className="images">
+                            {images.map((image, index) => (
+                                <li key={index}>
+                                    <img src={image} alt={`Product Image ${index + 1}`} />
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                     </>
                 ) : (
                     <p>{message}</p>
@@ -122,8 +155,8 @@ export const ProductDetails = () => {
                         />
                         <input
                             type="text"
-                            value={image}
-                            onChange={(e) => setImage(e.target.value)}
+                            value={images}
+                            onChange={(e) => setImages(e.target.value)}
                             placeholder="Product Image URL"
                         />
 

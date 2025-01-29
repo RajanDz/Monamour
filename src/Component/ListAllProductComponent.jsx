@@ -13,7 +13,7 @@ export const ListAllProduct = () => {
     const [deleteButton, setDeleteButton] = useState(false);
     const [message,setMessage] = useState("");
     const [reason, setReason] = useState("");
-
+    const [mainPhoto, setMainPhoto] = useState();
 
     const toggleDeleteButton = () => {
         setDeleteButton(!deleteButton)
@@ -30,9 +30,12 @@ export const ListAllProduct = () => {
                     product_id: product_id
                 })
             })
-            if (response.ok){
+            if (response.status === 200){
                 const data = await response.json();
-                console.log("Succes");
+                console.log('Product is deleted!')
+
+             } else if (response.status === 500) {
+                console.log('Failed to delete product!')
             }
         } catch (error) {
             console.error('There was an error!', error);
@@ -65,7 +68,29 @@ export const ListAllProduct = () => {
             console.error('There was an error!', error);
         }
     }
+    // async function getProductImages() {
+    //     try {
+    //         const response = await fetch(`http://localhost:8080/api/productsImage/${id}`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 'Content-type': 'application/json',
+    //             },
+    //         });
     
+    //         if (response.ok) {
+    //             const data = await response.json(); // Pozivanje json() funkcije
+    //             console.log('Recived data: ',data);
+    //             if (data.length > 0) {
+    //                 setMainPhoto(data[0]);
+    //             }
+    //              // Ispravna logika za ažuriranje stanja
+    //         } else {
+    //             console.log("Error happened while trying to get product images");
+    //         }
+    //     } catch (error) {
+    //         console.log("Error happened: ", error);
+    //     }
+    // }
     
     async function getAllProducts() {
         try {
@@ -91,6 +116,7 @@ export const ListAllProduct = () => {
     const filteredProducts = products.filter(product  => product.name.toLowerCase().includes(productName.toLowerCase()));
     setProducts(filteredProducts); 
     }
+    
 useEffect(() => {
     if (!user){
         console.log("You need to be logged in to acces this page");

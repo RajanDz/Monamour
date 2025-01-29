@@ -15,7 +15,7 @@
     border-radius: 5px; /* Zaobljeni ivice */
 }
 
-.createProduct button {
+.submit-button {
     border-radius: 5px;
     background-color: blue;
     color: white;
@@ -23,11 +23,44 @@
     width: 300px;
 }
 
-.createProduct button:hover {
+.submit-button:hover {
     background-color: rgb(66, 66, 186);
 }
 .response-message {
     font-size: 20px;
     font-weight: bold;
     color: rgb(0, 247, 41);
+}
+.add-image {
+    background-color: #c3bbbb;
+    height: 45px;
+    width: 45px;
+}
+.add-image:hover {
+    background-color: rgb(79, 73, 73);
+    color: rgb(255, 254, 254);
+}
+/* Kontejner za slike */
+.img-container {
+    display: flex; /* Reda slike u red */
+    flex-wrap: wrap; /* Omogućava prelazak u novi red ako ima mnogo slika */
+    gap: 10px; /* Razmak između slika */
+    justify-content: center; /* Centriranje slika unutar kontejnera */
+    margin-top: 20px; /* Razmak od ostatka sadržaja */
+}
+
+/* Stil za svaku sliku */
+.product-image {
+    width: 150px; /* Širina slike */
+    height: 150px; /* Visina slike */
+    object-fit: cover; /* Sprečava deformaciju slike, zadržava proporcije */
+    border-radius: 10px; /* Zaobljeni uglovi */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Blaga senka */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Animacija na hover */
+}
+
+/* Efekat na hover */
+.product-image:hover {
+    transform: scale(1.1); /* Povećava sliku na hover */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Naglašenija senka na hover */
 }

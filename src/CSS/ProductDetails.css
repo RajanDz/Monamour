@@ -8,6 +8,7 @@ body {
     align-items: flex-start;
     min-height: 100vh;
     background-color: #f4f4f4;
+    overflow: auto;
 }
 
 /* Glavni kontejner koji sadrži oba dela */
@@ -19,11 +20,16 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 1000px;
-    width: 100%;
+    width: auto;
+    overflow-y: auto;
 }
-
-/* Stil za deo sa informacijama o proizvodu */
+.product-images li{
+    text-decoration: none;
+    list-style-type: none;
+}
+.product-images img {
+    height: 610px;
+}
 .product-info {
     flex: 1;
     display: flex;
@@ -34,9 +40,9 @@ body {
 
 /* Stil za slike proizvoda */
 .product-info img {
-    width: 70%;
-    max-width: 400px;
-    height: auto;
+    background-color: #f3f1f1;
+    width: 250px;
+    height: 250px;
     border-radius: 8px;
 }
 
