@@ -1,11 +1,11 @@
 package com.monamour.monamour.service;
 
 
-import com.monamour.monamour.dto.ProductCreate;
+import com.monamour.monamour.dto.ImageResponse;
 import com.monamour.monamour.dto.ProductDetails;
 import com.monamour.monamour.dto.ProductsDeleteProcces;
 import com.monamour.monamour.entities.Product;
-import com.monamour.monamour.entities.ProductImages;
+import com.monamour.monamour.entities.ProductImage;
 import com.monamour.monamour.entities.ProductsActivityLog;
 import com.monamour.monamour.entities.User;
 import com.monamour.monamour.repository.ProductImagesRepo;
@@ -13,10 +13,10 @@ import com.monamour.monamour.repository.ProductRepo;
 import com.monamour.monamour.repository.ProductsActivityLogRepo;
 import com.monamour.monamour.repository.UserRepo;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -87,27 +87,46 @@ public class ProductService {
         product.setIsDeleted(false);
         productRepo.save(product);
 
-        List<ProductImages> productImages = new ArrayList<>();
+        boolean isFirst = true;
         for (MultipartFile file : images){
             String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
             Path filePath = Paths.get(defaultPath,fileName);
             Files.copy(file.getInputStream(), filePath);
 
-            ProductImages productImages1 = new ProductImages();
-            productImages1.setProduct(product);
-            productImages1.setImagePath(filePath.toString());
-            productImages.add(productImages1);
-
+            ProductImage productImage1 = new ProductImage();
+            productImage1.setProduct(product);
+            productImage1.setImagePath(filePath.toString());
+            if (isFirst){
+                productImage1.setMain(true);
+                isFirst = false;
+            }
+            productImagesRepo.save(productImage1);
         }
-        productImagesRepo.saveAll(productImages);
         return product;
+
+    }
+    public List<ImageResponse> getMainImage() throws IOException {
+        List<ProductImage> productImage = productImagesRepo.findByIsMain(true);
+        List<ImageResponse> base64Images = new ArrayList<>();
+        for (ProductImage productImage1: productImage){
+                File file = new File(productImage1.getImagePath());
+                if (!file.exists()){
+                    throw new FileNotFoundException();
+                }
+                byte [] imageBytes = Files.readAllBytes(file.toPath());
+                String base64Image = "data:image/png;base64," + Base64.getEncoder().encodeToString(imageBytes);
+                ImageResponse imageResponse = new ImageResponse();
+                imageResponse.setBase64Image(base64Image);
+                imageResponse.setProductId(productImage1.getProduct().getId());
+                base64Images.add(imageResponse);
+            }
+        return base64Images;
     }
     public List<String> getProductImages(Integer product_id) throws IOException {
-        List<ProductImages> productImages = productImagesRepo.findByProductId(product_id);
+        List<ProductImage> productImages = productImagesRepo.findByProductId(product_id);
         List<String> base64Images = new ArrayList<>();
-        for (ProductImages productImages2: productImages){
-            File file = new File(productImages2.getImagePath());
-            System.out.println("File path: " + file.getAbsolutePath());
+        for (ProductImage productImage2 : productImages){
+            File file = new File(productImage2.getImagePath());
             byte[] imageBytes = Files.readAllBytes(file.toPath());
             String base64Image = "data:image/png;base64," + Base64.getEncoder().encodeToString(imageBytes);
             base64Images.add(base64Image);

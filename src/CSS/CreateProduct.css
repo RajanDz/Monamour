@@ -51,8 +51,8 @@
 
 /* Stil za svaku sliku */
 .product-image {
-    width: 150px; /* Širina slike */
-    height: 150px; /* Visina slike */
+    width: 160px; /* Širina slike */
+    height: 160px; /* Visina slike */
     object-fit: cover; /* Sprečava deformaciju slike, zadržava proporcije */
     border-radius: 10px; /* Zaobljeni uglovi */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Blaga senka */
@@ -61,6 +61,8 @@
 
 /* Efekat na hover */
 .product-image:hover {
-    transform: scale(1.1); /* Povećava sliku na hover */
+    object-fit: fill;
+    object-position: top; /* Pomjera sliku da se više vidi */
+    transform: scale(2.1); /* Povećava sliku na hover */
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Naglašenija senka na hover */
 }

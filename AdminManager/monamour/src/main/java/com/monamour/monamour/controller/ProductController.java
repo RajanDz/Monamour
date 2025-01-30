@@ -1,6 +1,7 @@
 package com.monamour.monamour.controller;
 
 
+import com.monamour.monamour.dto.ImageResponse;
 import com.monamour.monamour.dto.ProductCreate;
 import com.monamour.monamour.dto.ProductDetails;
 import com.monamour.monamour.dto.ProductsDeleteProcces;
@@ -54,6 +55,11 @@ public class ProductController {
     public ResponseEntity<List<String>> getProductImage(@PathVariable Integer id) throws IOException {
         List<String> image = productService.getProductImages(id);
         return ResponseEntity.ok(image);
+    }
+    @GetMapping("/productMainImage")
+    public ResponseEntity<List<ImageResponse>> getProductMainImage() throws IOException {
+        List<ImageResponse> mainImage = productService.getMainImage();
+        return ResponseEntity.ok(mainImage);
     }
     @PostMapping("/createProduct")
     public ResponseEntity<Product> createProduct (@RequestParam(name = "name") String name,

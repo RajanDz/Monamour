@@ -11,8 +11,8 @@ export const CreateProduct = () => {
 
     const handleFileChange = (e) => {
         setImages((prevImages) => [...prevImages,...Array.from(e.target.files)]);
-        console.log(e.target.files); // Konvertujemo FileList u niz
-        console.log(images); // Konvertujemo FileList u niz
+        console.log("Files: ", e.target.files);
+        console.log("Files array: ", Array.from(e.target.files));
     };
 
     async function createProduct() {
@@ -24,7 +24,7 @@ export const CreateProduct = () => {
             formData.append("price", price);
 
             images.forEach((image) => {
-                formData.append("images", image); // Slike se dodaju pod ključem "images"
+                formData.append("images", image); 
             });
 
             const response = await fetch('http://localhost:8080/api/createProduct', {
@@ -92,16 +92,19 @@ export const CreateProduct = () => {
                 </button>
             </div>
             {images.length > 0 && (
-                <div className='img-container'>
-                    {images.map((image,index) => (
-                        <img 
-                        className='product-image'
-                        key={index}
-                        src={URL.createObjectURL(image)}
-                        />
-                    ))}
-                </div>
-            )}
+    <div className='img-container'>
+        {images.map((image, index) => {
+            return (
+                <img 
+                    className='product-image'
+                    key={index}
+                    src={URL.createObjectURL(image)}
+                    alt={`Image ${index}`}
+                />
+            );
+        })}
+    </div>
+)}
             <div>
                 <input 
                     type="text"

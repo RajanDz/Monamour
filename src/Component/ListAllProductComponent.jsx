@@ -13,11 +13,15 @@ export const ListAllProduct = () => {
     const [deleteButton, setDeleteButton] = useState(false);
     const [message,setMessage] = useState("");
     const [reason, setReason] = useState("");
-    const [mainPhoto, setMainPhoto] = useState();
+    const [mainProductsPhoto, setMainProductsPhoto] = useState([]);
 
     const toggleDeleteButton = () => {
         setDeleteButton(!deleteButton)
     }
+    const getProductImageById = (productId) => {
+        const image = mainProductsPhoto.find(image => image.productId === productId);
+        return image ? image.base64Image : ''; // Ako ne postoji slika, vraćamo praznu string
+    };
     async function deleteProduct(product_id) {
         try {
             const response = await fetch("http://localhost:8080/api/deleteOneProduct",{
@@ -68,29 +72,26 @@ export const ListAllProduct = () => {
             console.error('There was an error!', error);
         }
     }
-    // async function getProductImages() {
-    //     try {
-    //         const response = await fetch(`http://localhost:8080/api/productsImage/${id}`, {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Content-type': 'application/json',
-    //             },
-    //         });
+    async function getProductImages() {
+        try {
+            const response = await fetch(`http://localhost:8080/api/productMainImage`, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+            });
     
-    //         if (response.ok) {
-    //             const data = await response.json(); // Pozivanje json() funkcije
-    //             console.log('Recived data: ',data);
-    //             if (data.length > 0) {
-    //                 setMainPhoto(data[0]);
-    //             }
-    //              // Ispravna logika za ažuriranje stanja
-    //         } else {
-    //             console.log("Error happened while trying to get product images");
-    //         }
-    //     } catch (error) {
-    //         console.log("Error happened: ", error);
-    //     }
-    // }
+            if (response.ok) {
+                const data = await response.json(); 
+                console.log('Recived data: ',data);
+                setMainProductsPhoto(data);
+            } else {
+                console.log("Error happened while trying to get product images");
+            }
+        } catch (error) {
+            console.log("Error happened: ", error);
+        }
+    }
     
     async function getAllProducts() {
         try {
@@ -124,6 +125,7 @@ useEffect(() => {
     } else {
         console.log("User details:", user); // Ispisivanje user objekta
         getAllProducts();
+        getProductImages();
     }
 }, [user, navigate]);  
 
@@ -173,7 +175,7 @@ return (
                 <li key={index}>
                     <p>Name: {product.name}</p>
                     <p>Cijena: {product.price}e</p>
-                    <img className='img' src={product.image} alt="error" />
+                    <img className='img' src={getProductImageById(product.id)} alt="error" />
                     <Link to={`/productDetails/${product.id}`}>
                     <button className='edit-button'>Edit</button>
                     </Link>
