@@ -2,7 +2,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgb(183, 186, 186);
+    background-color: rgba(137, 137, 137, 0.749) !important;
     height: 100vh;
     overflow: hidden;
 }
@@ -11,10 +11,13 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgb(247, 244, 244);
-    border-radius: 85px;
-    height: 700px;
+    background-color: rgb(250, 240, 240);
+    border-radius: 65px;
+    height: auto;
     width: 700px;
+}
+.user-container p {
+    color: black;
 }
 .user-details{
     display: flex;
@@ -37,6 +40,7 @@ body {
 
 }
 .detail-item p {
+    color: black;
     margin-top: 15px;
 }
 .detail-item p,button {
@@ -63,13 +67,17 @@ body {
     background-color: white;
     color: black;
 }
+.user-authorization {
+    display: flex;
+    margin-bottom: 5px;
+}
 .user-authorization button {
     background-color: rgb(9, 9, 9);
     color: white;
     border: none;
     height: 40px;
     width: 80px;
-    border-radius: 3px;
+    border-radius: 10px;
     cursor: pointer;
 }
 .profile-photo {
@@ -163,11 +171,47 @@ body {
 }
 .roles-to-add {
     display: flex;
+    background-color: rgb(59, 61, 61);
+    position: absolute; 
+    left: 20%;          
+    top: 0;              
+    margin-left: 10px;
+    border-radius: 5px;
+    height: auto;
+    width: 260px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+.error-roles {
+    color: red;
+}
+.edit-details{
+    display: flex;
+    position: absolute;
+    background-color: white;
+    border: 1px solid black;
+    height: 150px;
+    width: 400px;
+    border-radius: 5px;
+}
+.getBack-button{
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    color: white;
+    background-color: rgb(0, 0, 0);
+    width: auto;
+    height: 30px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+/* .roles-to-add {
+    display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    position: absolute;  /* Apstraktna pozicija u odnosu na roditelja */
-    left: 20%;          /* Postavi element desno od dugmeta */
-    top: 0;              /* Poravnaj ga na vrh dugmeta */
+    position: absolute; 
+    left: 20%;          
+    top: 0;              
     margin-left: 10px;
     background-color: rgb(0, 0, 0);
     height: 220px;
@@ -176,6 +220,7 @@ body {
     overflow: scroll;
     overflow-x: hidden;
 }
+
 .roles-to-add p {
     display: flex;
     color: white;
@@ -184,7 +229,7 @@ body {
 }
 .roles-to-add button {
     margin-right: auto;
-}
+} */
 .role {
     display: flex; /* Fleksibilno pozicioniranje za paragraf i dugme */
     justify-content: space-between; /* Razmak između paragrafa i dugmeta */
@@ -192,7 +237,8 @@ body {
     padding: 10px; /* Dodatno razdvajanje unutar elementa */
     width: 80%; /* Osigurava da zauzima celu širinu roditelja */
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    box-sizing: border-box; /* Uključuje padding u ukupnu širinu */
+    box-sizing: border-box;
+    margin-top: 0px; /* Uključuje padding u ukupnu širinu */
     /* Opcioni razdvajanje elemenata */
 }
 .role p {

@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ProductImages {
+public class ProductImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +23,7 @@ public class ProductImages {
 
     @Column(name = "imagePath")
     private String imagePath;
+
+    @Column(name = "is_main")
+    private boolean isMain;
 }

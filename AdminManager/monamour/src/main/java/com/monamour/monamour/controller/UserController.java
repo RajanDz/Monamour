@@ -92,4 +92,9 @@ public class UserController {
         UserLog userLog = userService.userLog(id);
         return ResponseEntity.ok(userLog);
     }
+    @GetMapping("/sumOfNewUsers")
+    public ResponseEntity<Integer> getSumOfNewUsers() {
+        Integer sum = userService.sumOfUserRegisteredInLastMonth();
+        return ResponseEntity.ok(sum);
+    }
 }

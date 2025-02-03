@@ -1,10 +1,9 @@
 package com.monamour.monamour.controller;
 
 
-import com.monamour.monamour.dto.ProductCreate;
-import com.monamour.monamour.dto.ProductDetails;
-import com.monamour.monamour.dto.ProductsDeleteProcces;
+import com.monamour.monamour.dto.*;
 import com.monamour.monamour.entities.Product;
+import com.monamour.monamour.entities.ProductImage;
 import com.monamour.monamour.entities.ProductsActivityLog;
 import com.monamour.monamour.repository.ProductRepo;
 import com.monamour.monamour.service.ProductService;
@@ -51,9 +50,19 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/productsImage/{id}")
-    public ResponseEntity<List<String>> getProductImage(@PathVariable Integer id) throws IOException {
-        List<String> image = productService.getProductImages(id);
+    public ResponseEntity<List<ImageResponse>> getProductImage(@PathVariable Integer id) throws IOException {
+       List<ImageResponse> image = productService.getProductImages(id);
         return ResponseEntity.ok(image);
+    }
+    @GetMapping("/productMainImage")
+    public ResponseEntity<List<MainImageResponse>> getProductMainImage() throws IOException {
+        List<MainImageResponse> mainImage = productService.getMainImage();
+        return ResponseEntity.ok(mainImage);
+    }
+    @DeleteMapping("/deleteImageofProduct/{imageId}")
+    public ResponseEntity<ProductImage> deleteImageofProduct(@PathVariable Integer imageId) throws IOException {
+        ProductImage deleteImage = productService.deleteImage(imageId);
+        return ResponseEntity.ok(deleteImage);
     }
     @PostMapping("/createProduct")
     public ResponseEntity<Product> createProduct (@RequestParam(name = "name") String name,
@@ -64,9 +73,16 @@ public class ProductController {
         Product product = productService.createProduct(name,color,size,price,images);
         return ResponseEntity.ok(product);
     }
-    @PostMapping("/editProductDetaoils")
-    public ResponseEntity<Product> editProductDetails (@RequestBody ProductDetails productDetails) {
-        Product product = productService.editProductDetails(productDetails);
+    @PostMapping("/editProductDetails")
+    public ResponseEntity<Product> editProductDetails ( @RequestParam(name = "id") Integer id
+                                                        ,@RequestParam(name = "name") String name,
+                                                       @RequestParam("color") String color,
+                                                       @RequestParam(name = "size") String size,
+                                                       @RequestParam("price") Double price,
+                                                       @RequestParam(value = "images", required = false)MultipartFile [] images,
+                                                        @RequestParam(value = "replacedImage", required = false) Integer replacedImageId
+    ) throws IOException {
+        Product product = productService.editProductDetails(id,name,color,size,price,images,replacedImageId);
         return ResponseEntity.ok(product);
     }
     @GetMapping("/productLogs")
