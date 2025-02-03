@@ -32,9 +32,11 @@
     color: rgb(0, 247, 41);
 }
 .add-image {
-    background-color: #c3bbbb;
+    background-color: #eee8e8;
     height: 45px;
     width: 45px;
+    border-radius: 15px;
+    border: none;
 }
 .add-image:hover {
     background-color: rgb(79, 73, 73);
@@ -63,6 +65,6 @@
 .product-image:hover {
     object-fit: fill;
     object-position: top; /* Pomjera sliku da se više vidi */
-    transform: scale(2.1); /* Povećava sliku na hover */
+    transform: scale(1.5); /* Povećava sliku na hover */
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Naglašenija senka na hover */
 }

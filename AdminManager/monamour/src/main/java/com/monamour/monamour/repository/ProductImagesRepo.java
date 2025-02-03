@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface ProductImagesRepo extends JpaRepository<ProductImage, Integer> {
     List<ProductImage> findByProductId(Integer id);
     List<ProductImage> findByIsMain(boolean isMain);
+
 }

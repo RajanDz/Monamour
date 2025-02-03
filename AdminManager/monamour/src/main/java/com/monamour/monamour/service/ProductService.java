@@ -2,6 +2,7 @@ package com.monamour.monamour.service;
 
 
 import com.monamour.monamour.dto.ImageResponse;
+import com.monamour.monamour.dto.MainImageResponse;
 import com.monamour.monamour.dto.ProductDetails;
 import com.monamour.monamour.dto.ProductsDeleteProcces;
 import com.monamour.monamour.entities.Product;
@@ -105,9 +106,9 @@ public class ProductService {
         return product;
 
     }
-    public List<ImageResponse> getMainImage() throws IOException {
+    public List<MainImageResponse> getMainImage() throws IOException {
         List<ProductImage> productImage = productImagesRepo.findByIsMain(true);
-        List<ImageResponse> base64Images = new ArrayList<>();
+        List<MainImageResponse> base64Images = new ArrayList<>();
         for (ProductImage productImage1: productImage){
                 File file = new File(productImage1.getImagePath());
                 if (!file.exists()){
@@ -115,47 +116,78 @@ public class ProductService {
                 }
                 byte [] imageBytes = Files.readAllBytes(file.toPath());
                 String base64Image = "data:image/png;base64," + Base64.getEncoder().encodeToString(imageBytes);
-                ImageResponse imageResponse = new ImageResponse();
-                imageResponse.setBase64Image(base64Image);
-                imageResponse.setProductId(productImage1.getProduct().getId());
+            MainImageResponse imageResponse = new MainImageResponse();
+            imageResponse.setProductId(productImage1.getProduct().getId());
+            imageResponse.setBase64Image(base64Image);
                 base64Images.add(imageResponse);
             }
         return base64Images;
     }
-    public List<String> getProductImages(Integer product_id) throws IOException {
+    public List<ImageResponse> getProductImages(Integer product_id) throws IOException {
         List<ProductImage> productImages = productImagesRepo.findByProductId(product_id);
-        List<String> base64Images = new ArrayList<>();
-        for (ProductImage productImage2 : productImages){
+        Set<String> uniqueBase64Images = new HashSet<>();  // Koristi Set da izbegneš duplikate
+        List<ImageResponse> imageResponses = new ArrayList<>();
+
+        for (ProductImage productImage2 : productImages) {
             File file = new File(productImage2.getImagePath());
             byte[] imageBytes = Files.readAllBytes(file.toPath());
             String base64Image = "data:image/png;base64," + Base64.getEncoder().encodeToString(imageBytes);
-            base64Images.add(base64Image);
+
+            // Ako je slika već dodata, preskoči je
+            if (uniqueBase64Images.add(base64Image)) {
+                imageResponses.add(new ImageResponse(productImage2.getId(), base64Image));
+            }
         }
-        return base64Images.isEmpty() ? null : base64Images;
+
+        return imageResponses;
     }
-    public Product editProductDetails (ProductDetails productDetails){
-        Optional<Product> findProduct = productRepo.findById(productDetails.getId());
+
+    public Product editProductDetails (Integer id,String name, String color, String size, Double price, MultipartFile [] images, Integer replacedImageId) throws IOException {
+        Optional<Product> findProduct = productRepo.findById(id);
         if (findProduct.isPresent()) {
             Product product = findProduct.get();
-            if (productDetails.getName() != null && !productDetails.getName().isEmpty()){
-                product.setName(productDetails.getName());
+            if (name != null && !name.isEmpty()){
+                product.setName(name);
             }
-            if (productDetails.getColor() != null && !productDetails.getColor().isEmpty()){
-                product.setColor(productDetails.getColor());
+            if (color != null && !color.isEmpty()){
+                product.setColor(color);
             }
-            if (productDetails.getSize() != null && !productDetails.getSize().isEmpty()){
-                product.setSize(productDetails.getSize());
+            if (size != null && !size.isEmpty()){
+                product.setSize(size);
             } else {
                 throw new RuntimeException("Size can not be null");
             }
-            if (productDetails.getPrice() != null){
-                product.setPrice(productDetails.getPrice());
+            if (price != null){
+                product.setPrice(price);
             }
+            if (images != null && images.length > 0){
+                for (MultipartFile image: images){
+                    if (image != null && !image.isEmpty()){
+                        String fileName = UUID.randomUUID() + "_" + image.getOriginalFilename();
+                        Path filePath = Paths.get(defaultPath,fileName);
+                        Files.copy(image.getInputStream(), filePath);
+
+                        ProductImage productImage = new ProductImage();
+                        productImage.setProduct(product);
+                        productImage.setImagePath(filePath.toString());
+                        productImage.setMain(false);
+                        productImagesRepo.save(productImage);
+                        productImagesRepo.deleteById(replacedImageId);
+                    }
+                }
+            }
+
             return productRepo.save(product);
         }
         return null;
     }
-
+    public ProductImage deleteImage(Integer imageId) throws IOException {
+        ProductImage productImage = productImagesRepo.findById(imageId).get();
+        if (productImage != null) {
+            productImagesRepo.deleteById(productImage.getId());
+        }
+        return productImage;
+    }
     public List<ProductsActivityLog> getAllProductsActivityLog(){
         return productsActivityLogRepo.findAll();
     }

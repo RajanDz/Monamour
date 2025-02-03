@@ -1,6 +1,5 @@
 package com.monamour.monamour.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,10 +11,7 @@ import org.springframework.stereotype.Component;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ImageResponse {
-
-    private Integer imageId;
-    private String base64Image;
-
-
+public class MainImageResponse {
+    public Integer productId;
+    public String base64Image;
 }

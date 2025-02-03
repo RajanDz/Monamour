@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
@@ -112,5 +113,17 @@ public class UserService {
             return findUser.get();
     }
 
-
+    public Integer sumOfUserRegisteredInLastMonth(){
+        List<UserLog> allUsers = userLogRepo.findAll();
+        LocalDateTime now = LocalDateTime.now();
+        Integer sum = 0;
+        for (UserLog user : allUsers) {
+            Duration duration = Duration.between(user.getRegistrationDate(), now);
+            if (duration.toDays() <= 30){
+                sum++;
+            }
+        }
+        System.out.println(sum);
+        return sum;
+    }
 }
