@@ -154,7 +154,7 @@ return (
     </div>
 
     {deleteButton && (
-    <div className='deleteProducts'>
+    <div className='delete-products'>
         <div>
             <input 
                 type="text"

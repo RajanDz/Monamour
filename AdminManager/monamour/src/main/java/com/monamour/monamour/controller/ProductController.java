@@ -40,7 +40,7 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
     @PostMapping("/deleteAllProducts")
-    public ResponseEntity<Map<String,String>> deleteAllProducts(@RequestBody ProductsDeleteProcces productsDeleteProcces) {
+    public ResponseEntity<Map<String,String>> deleteAllProducts(@RequestBody ProductsDeleteProcces productsDeleteProcces) throws IOException {
         Map<String, String> response = productService.deleteAll(productsDeleteProcces); 
         return ResponseEntity.ok(response);
     }
@@ -84,6 +84,12 @@ public class ProductController {
     ) throws IOException {
         Product product = productService.editProductDetails(id,name,color,size,price,images,replacedImageId);
         return ResponseEntity.ok(product);
+    }
+    @PostMapping("/uploadPhoto")
+    public ResponseEntity<ProductImage> uploadPhoto (@RequestParam(name = "id") Integer id,
+                                                @RequestParam(name = "images") MultipartFile [] images) throws IOException {
+        ProductImage productImage = productService.uploadPhoto(id, images);
+        return ResponseEntity.ok(productImage);
     }
     @GetMapping("/productLogs")
     public ResponseEntity<List<ProductsActivityLog>> getAllProductLogs () {

@@ -13,6 +13,7 @@ import com.monamour.monamour.repository.ProductImagesRepo;
 import com.monamour.monamour.repository.ProductRepo;
 import com.monamour.monamour.repository.ProductsActivityLogRepo;
 import com.monamour.monamour.repository.UserRepo;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 public class ProductService {
@@ -65,16 +67,33 @@ public class ProductService {
         map.put("status", "failed");
         return map;
     }
-    public Map<String,String> deleteAll(ProductsDeleteProcces productsDeleteProcces){
+    public Map<String,String> deleteAll(ProductsDeleteProcces productsDeleteProcces) throws IOException {
         ProductsActivityLog activityLog = new ProductsActivityLog();
         User user = userRepo.findById(productsDeleteProcces.getUser_id()).orElseThrow();
-        activityLog.setUser(user);
-        activityLog.setProduct(null);
-        activityLog.setAction("Delete all");
-        activityLog.setTimestamp(LocalDateTime.now());
-        activityLog.setReason(productsDeleteProcces.getReason());
-        productsActivityLogRepo.save(activityLog);
-        productRepo.softDeleteProducts();
+            if (user != null) {
+                activityLog.setUser(user);
+                activityLog.setProduct(null);
+                activityLog.setAction("Delete all");
+                activityLog.setTimestamp(LocalDateTime.now());
+                activityLog.setReason(productsDeleteProcces.getReason());
+                productsActivityLogRepo.save(activityLog);
+                productRepo.softDeleteProducts();
+                productImagesRepo.deleteAll();
+
+
+                Path folderPath = Paths.get(defaultPath);
+                try (Stream<Path> files = Files.list(folderPath) ){
+                    files.filter(Files::isRegularFile)
+                            .forEach(path -> {
+                                try {
+                                    Files.delete(path);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            });
+                     }
+            }
+
         Map<String, String> response = new HashMap<>();
         response.put("message", "Products are deleted");
         return response;
@@ -178,6 +197,31 @@ public class ProductService {
             }
 
             return productRepo.save(product);
+        }
+        return null;
+    }
+    public ProductImage uploadPhoto (Integer productId,MultipartFile [] image) throws IOException {
+        Optional<Product> findProduct = productRepo.findById(productId);
+        if (findProduct.isPresent()) {
+            if (image != null && image.length > 0){
+                for (MultipartFile file : image){
+                    String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+                    Path filePath = Paths.get(defaultPath,fileName);
+                    Files.copy(file.getInputStream(),filePath);
+
+                    ProductImage productImage = new ProductImage();
+                    productImage.setProduct(findProduct.get());
+                    productImage.setImagePath(filePath.toString());
+                    productImage.setMain(false);
+                    productImagesRepo.save(productImage);
+                    return  productImage;
+                }
+            } else{
+                throw new RuntimeException("Image can not be added!");
+
+            }
+        } else  {
+            throw new RuntimeException("Product does not exist!");
         }
         return null;
     }
