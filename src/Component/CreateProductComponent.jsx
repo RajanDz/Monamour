@@ -6,7 +6,7 @@ export const CreateProduct = () => {
     const [color, setColor] = useState("");
     const [size, setSize] = useState("");
     const [images, setImages] = useState([]);
-    const [price, setPrice] = useState();
+    const [price, setPrice] = useState(0);
     const [message, setMessage] = useState("");
 
     const handleFileChange = (e) => {

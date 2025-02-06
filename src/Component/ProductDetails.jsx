@@ -20,7 +20,7 @@ export const ProductDetails = () => {
     const [replaceImage, setReplaceImage] = useState([]);
     const [newPhotos, setNewPhotos] = useState([]);
     const [replacedImageId, setReplacedImageId] = useState(null);
-    const [moreDetails, setMoreDetails] = useState(false);
+    const [selectedImageId, setSelectedImageId] = useState(null);
 
 
     const handleFileChange = (event) => {
@@ -30,9 +30,6 @@ export const ProductDetails = () => {
         setNewPhotos((prevImages) => [...prevImages, ...Array.from(event.target.files)]);
     };
     
-    const handleMoreDetails = () => {
-        setMoreDetails(!moreDetails);
-    }
     async function fetchProductDetails() {
         try {
             const response = await fetch(`http://localhost:8080/api/findProduct/${id}`, {
@@ -100,6 +97,7 @@ export const ProductDetails = () => {
                 console.log("Photos uploaded successfully:", data);
                 fetchProductDetails();  // Osveži detalje proizvoda
                 getProductImages();    // Osveži slike proizvoda
+                setNewPhotos([]);
             } else {
                 console.log("Failed to upload photos");
             }
@@ -120,7 +118,6 @@ export const ProductDetails = () => {
                     formData.append("images", image);
                 })
             }
-            
         try {
             const response = await fetch('http://localhost:8080/api/editProductDetails', {
                 method: 'POST',
@@ -130,12 +127,31 @@ export const ProductDetails = () => {
                 const data = await response.json();
                 fetchProductDetails();
                 getProductImages();
+                setReplaceImage([]); 
+                setReplacedImageId(null); 
                 console.log(data);
+                replaceImage.forEach((image) => {
+                    console.log("Slike: ",image);
+                })
             }else {
                 console.log("Failed to edit details of product");
             }
         } catch (error) {
             console.error('There was an error!', error);
+        }
+    }
+    async function setImageAsDefault(imageid) {
+        try {
+            const response = await fetch(`http://localhost:8080/api/setImageAsDefault/${imageid}`, {
+                method: 'GET'
+            });
+            if (response.ok){
+                console.log("You set default image with id: ", imageid);
+            }else {
+                console.log("Error happen while trying to set image as deafault with id: ", imageid);
+            }
+        } catch (error) {
+            console.log('Error happen: ', error);
         }
     }
     async function deleteImageOfProduct(imageId) {
@@ -145,6 +161,7 @@ export const ProductDetails = () => {
             });
             if (response.ok){
                 const data = await response.json();
+                getProductImages();
                 console.log('Successfully deleted: ', data);
             } else {
                 console.log('Error happen');
@@ -187,13 +204,13 @@ export const ProductDetails = () => {
                                     <div className="image-container">
                                     <img src={image.base64Image} alt={`Product Image ${index + 1}`} />
                                     <button 
-                                    onClick={handleMoreDetails}
+                                    onClick={() => setSelectedImageId(prevId => prevId === image.imageId ? null: image.imageId)}
                                     className="more-details">
-                                    <span className="material-symbols-outlined">menu</span> {/* Ovdje se koristi ikona */}
+                                    <span className="material-symbols-outlined">menu</span>
                                     </button>
-                                    {moreDetails && (
+                                    {selectedImageId === image.imageId && (
                                         <div className='details-container'>
-                                            <button>Set as profile image</button>
+                                            <button onClick={() => setImageAsDefault(image.imageId)}>Set as profile image</button>
                                             <input 
                                         type="file" 
                                         multiple

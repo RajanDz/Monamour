@@ -235,4 +235,13 @@ public class ProductService {
     public List<ProductsActivityLog> getAllProductsActivityLog(){
         return productsActivityLogRepo.findAll();
     }
+
+    public ProductImage setImageAsDefault (Integer imageId) throws IOException {
+        Optional<ProductImage> findImage = productImagesRepo.findById(imageId);
+         if(findImage.isPresent()){
+             findImage.get().setMain(true);
+             productImagesRepo.save(findImage.get());
+         }
+         return findImage.get();
+    }
 }

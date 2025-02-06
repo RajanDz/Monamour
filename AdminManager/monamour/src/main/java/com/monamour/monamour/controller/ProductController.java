@@ -96,4 +96,9 @@ public class ProductController {
         List<ProductsActivityLog> logs = productService.getAllProductsActivityLog();
         return ResponseEntity.ok(logs);
     }
+    @GetMapping("/setImageAsDefault/{imageId}")
+    public ResponseEntity<ProductImage> setImageAsDefault (@PathVariable Integer imageId) throws IOException {
+        ProductImage productImage = productService.setImageAsDefault(imageId);
+        return ResponseEntity.ok(productImage);
+    }
 }

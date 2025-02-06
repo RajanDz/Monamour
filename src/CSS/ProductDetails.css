@@ -133,6 +133,7 @@ body {
 }
 .details-container {
     display: flex;
+    align-items: center;
     flex-direction: column;
     position: absolute;
     justify-content: center;
@@ -142,6 +143,8 @@ body {
     background-color: white;
     height: auto;
     width: auto;
+    padding: 5px;
+    border-radius: 5px;
 }
 .details-container button {
     background-color: white;
