@@ -7,13 +7,10 @@ import com.monamour.monamour.entities.ProductImage;
 import com.monamour.monamour.entities.ProductsActivityLog;
 import com.monamour.monamour.repository.ProductRepo;
 import com.monamour.monamour.service.ProductService;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

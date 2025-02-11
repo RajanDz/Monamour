@@ -1,9 +1,9 @@
-import '../CSS/Main.css'
+import '../CSS/NavigationBar.css'
 import { useState } from 'react';
 import { useUser } from './UserContext';
 import { Link } from 'react-router-dom';
 import { ListAllProduct } from './ListAllProductComponent';
-export const MainComponent = () => {
+export const NavigationBar = () => {
     const { user } = useUser();
     const [isOpen, setIsOpen] = useState(false);
     const [isSectionOpen, setisSectionOpen] = useState(false);
@@ -21,6 +21,7 @@ export const MainComponent = () => {
                 <ul>
                     <li>
                         <Link to="/products">Products</Link>
+                        <Link to="/users">Users</Link>
                     </li>
                 </ul>
             </div>

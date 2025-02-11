@@ -97,4 +97,9 @@ public class UserController {
         Integer sum = userService.sumOfUserRegisteredInLastMonth();
         return ResponseEntity.ok(sum);
     }
+    @PostMapping("/findUsersByFilter")
+    public ResponseEntity<List<User>> findUsersByFilter(@RequestParam(name = "userId",required = false) Integer userId, @RequestParam(name = "filter",required = false) String filter) {
+        List<User> findUsers = userService.findUserByFilter(userId, filter);
+        return ResponseEntity.ok(findUsers);
+    }
 }

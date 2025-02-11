@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -112,7 +113,30 @@ public class UserService {
             userRepo.save(findUser.get());
             return findUser.get();
     }
-
+    public List<User> findUserByFilter(Integer userId, String input){
+        List<User> users = new ArrayList<>();
+         if (userId != null){
+             Optional<User> findUserById = userRepo.findById(userId);
+             if (findUserById.isPresent()) {
+                 users.add(findUserById.get());
+             }
+         } else if (input != null && !input.isEmpty()) {
+                if (isEmail(input)){
+                    Optional<User> findUserByEmail = userRepo.findByEmail(input);
+                    if (findUserByEmail.isPresent()) {
+                        users.add(findUserByEmail.get());
+                    }
+                } else {
+                    List<User> findByNameOrLastname = userRepo.findByNameOrLastname(input,input);
+                    if (!findByNameOrLastname.isEmpty()) {
+                        for (User user : findByNameOrLastname) {
+                            users.add(user);
+                        }
+                    }
+                }
+        }
+         return users;
+    }
     public Integer sumOfUserRegisteredInLastMonth(){
         List<UserLog> allUsers = userLogRepo.findAll();
         LocalDateTime now = LocalDateTime.now();
@@ -125,5 +149,10 @@ public class UserService {
         }
         System.out.println(sum);
         return sum;
+    }
+
+
+    public boolean isEmail(String input){
+        return input.contains("@");
     }
 }
