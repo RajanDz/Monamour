@@ -135,7 +135,7 @@ public class UserService {
                     }
                 }
         }
-         return users;
+             return users;
     }
     public Integer sumOfUserRegisteredInLastMonth(){
         List<UserLog> allUsers = userLogRepo.findAll();
