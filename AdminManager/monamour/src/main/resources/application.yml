@@ -13,5 +13,5 @@ jpa:
   ddl-auto: update
 
 app:
-  jwtSecret: mySecret123#23232
+  jwtSecret: ThisIsASecretKeyWithAtLeast32CharactersKeyWithAtLeast32CharactersKeyWithAtLeast32Characters
   jwtExpirationMs: 3000000
