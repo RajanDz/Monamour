@@ -1,7 +1,8 @@
 package com.monamour.monamour.dto;
 
 public enum AppRole {
-    ROLE_USER,
+    Emplooyer,
+    User,
     ROLE_SELLER,
     ROLE_ADMIN
 }

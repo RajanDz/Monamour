@@ -60,11 +60,16 @@ public class WebConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        System.out.println("SecurityFilterChain initialized..."); // DEBUG
+
         http.csrf(csrf -> csrf.disable())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/api/**").hasAuthority("ROLE_Manager") // koristimo ROLE_ ako je uloga sa prefixom
+                                .requestMatchers("/product/**").hasAuthority("ROLE_Manager") // ako je uloga prefiksirana sa ROLE_
+                                .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());

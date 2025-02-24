@@ -33,7 +33,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PreAuthorize("hasAuthority('Manager')")
+//    @PreAuthorize("hasRole('Emplooyer')")
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
