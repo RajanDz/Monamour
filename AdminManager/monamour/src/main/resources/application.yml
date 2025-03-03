@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8080
 
 spring:
   datasource:
@@ -14,4 +14,5 @@ jpa:
 
 app:
   jwtSecret: ThisIsASecretKeyWithAtLeast32CharactersKeyWithAtLeast32CharactersKeyWithAtLeast32Characters
-  jwtExpirationMs: 3000000
+  jwtExpirationMs: 300000000
+  jwtCookieName: MonamourCookie

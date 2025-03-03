@@ -30,6 +30,7 @@ export const CreateProduct = () => {
             const response = await fetch('http://localhost:8080/api/createProduct', {
                 method: 'POST',
                 body: formData,
+                credentials: 'include'
             });
 
             if (response.ok) {

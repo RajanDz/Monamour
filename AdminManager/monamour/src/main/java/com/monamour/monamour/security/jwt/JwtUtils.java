@@ -1,12 +1,19 @@
 package com.monamour.monamour.security.jwt;
 
+import com.monamour.monamour.entities.User;
+import com.monamour.monamour.repository.UserRepo;
+import com.monamour.monamour.security.service.UserDetailsImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.slf4j.Logger;
@@ -14,11 +21,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.WebUtils;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class JwtUtils {
@@ -30,26 +39,49 @@ public class JwtUtils {
     @Value("${app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
+    @Value("${app.jwtCookieName}")
+    public String jwtCookieName;
 
-    public String getJwtFromHeader(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        logger.debug("Authorization Header: {}", bearerToken);
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7); // Remove Bearer prefix
+    @Autowired
+    private UserRepo userRepo;
+
+    public String getUsernameFromTokenFromCookie(HttpServletRequest request) {
+        Cookie cookie = WebUtils.getCookie(request,jwtCookieName);
+        if (cookie != null) {
+            String username = getUserNameFromJwtToken(cookie.getValue());
+            if (username != null) {
+                return username;
+            }
+        }
+            return null;
+    }
+    public String getJwtFromCookie(HttpServletRequest request) {
+        Cookie cookie = WebUtils.getCookie(request, jwtCookieName);
+        if (cookie != null) {
+            System.out.println("Cookie found: " + cookie.getValue());
+            return cookie.getValue();
         }
         return null;
     }
+    public ResponseCookie generateJwtCookie(UserDetailsImpl userDetails) {
+        String jwt = generateTokenFromUsername(userDetails.getUsername());
+        ResponseCookie cookie = ResponseCookie.from(jwtCookieName, jwt)
+                .path("/") // Postavi putanju
+                .maxAge(30 * 60) // Kolačić traje 30 minuta
+                .httpOnly(true)  // Sprečava pristup preko JavaScript-a
+                .secure(true)    // Omogućava kolačiće samo preko HTTPS-a
+                .sameSite("Strict") // Sprečava slanje kolačića sa drugih domena
+                .build();
+        return cookie;
+    }
 
-    public String generateTokenFromUsername(UserDetails userDetails) {
-        String username = userDetails.getUsername();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
+    public String generateTokenFromUsername(String username) {
+        Optional<User> findUser = userRepo.findByUsername(username);
         return Jwts.builder()
                 .subject(username)
-                .claim("roles", roles)
+                .claim("roles", findUser.get().getRoles())
                 .issuedAt(new Date())
-                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .expiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(key())
                 .compact();
     }

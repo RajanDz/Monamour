@@ -25,6 +25,7 @@ import java.util.List;
 
 @RestController()
 @RequestMapping("/api")
+@CrossOrigin(origins = "*") // Dozvoljava CORS za sve domene
 public class UserController {
 
     private final UserService userService;

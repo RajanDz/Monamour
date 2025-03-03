@@ -30,7 +30,7 @@ export const ListAllProduct = () => {
                     'Content-type': 'application/json',
                 },
                 body: JSON.stringify({
-                    user_id: user.user.id,
+                    user_id: user.id,
                     product_id: product_id
                 })
             })
@@ -55,7 +55,7 @@ export const ListAllProduct = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    user_id: user.user.id,  // Koristite user.id direktno
+                    user_id: user.id,  // Koristite user.id direktno
                     reason: reason      // Prolazimo razlog za brisanje
                 })
             });
@@ -99,7 +99,8 @@ export const ListAllProduct = () => {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                }
+                },
+                credentials: 'include', // Omogućava slanje cookies sa zahtevima
             });
 
             if (!response.ok){
