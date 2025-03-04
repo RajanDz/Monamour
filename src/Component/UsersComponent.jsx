@@ -21,6 +21,7 @@ export const UsersComponent = () => {
                 headers: {
                     'content-type': 'application/json'
                 },
+                credentials:'include'
             });
             if (response.ok){
                 const data = await response.json();
@@ -46,7 +47,9 @@ export const UsersComponent = () => {
         try {
             const response = await fetch('http://localhost:8080/api/findUsersByFilter', {
                 method: 'POST',
-                body: formData
+                body: formData,
+                credentials:'include'
+
             });
             if (response.ok){
                 const data = await response.json();

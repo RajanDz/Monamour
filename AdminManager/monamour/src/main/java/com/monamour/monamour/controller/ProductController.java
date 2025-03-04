@@ -42,6 +42,8 @@ public class ProductController {
         Map<String, String> response = productService.deleteAll(productsDeleteProcces); 
         return ResponseEntity.ok(response);
     }
+
+    @PreAuthorize("hasRole('ROLE_Emplooyer')")
     @PostMapping("/deleteOneProduct")
     public ResponseEntity<Map<String,String>> deleteOneProduct(@RequestBody ProductsDeleteProcces productsDeleteProcces) {
         Map<String,String> response = productService.deleteProductById(productsDeleteProcces);

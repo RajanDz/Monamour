@@ -69,8 +69,6 @@ public class JwtUtils {
                 .path("/") // Postavi putanju
                 .maxAge(30 * 60) // Kolačić traje 30 minuta
                 .httpOnly(true)  // Sprečava pristup preko JavaScript-a
-                .secure(true)    // Omogućava kolačiće samo preko HTTPS-a
-                .sameSite("Strict") // Sprečava slanje kolačića sa drugih domena
                 .build();
         return cookie;
     }

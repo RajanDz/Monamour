@@ -16,7 +16,9 @@ export const Dashboard = () => {
                 method: 'GET',
                 headers: {
                     'Content-type': 'application/json',
-                }
+                },
+                credentials: 'include', // Omogućava slanje cookies sa zahtevima
+
             });
             if (response.ok){
                 const data = await response.json();

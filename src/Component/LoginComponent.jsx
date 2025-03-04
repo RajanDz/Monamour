@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useUser } from './UserContext'
 import '../CSS/Login.css'
 import backroundImage from '../images/MONAMOUR.png'
 import { useNavigate } from 'react-router-dom'
+import { da } from 'date-fns/locale'
 export const LoginComponent = () => {
 
     const [username,setUsername] = useState("");
@@ -26,16 +27,17 @@ export const LoginComponent = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ username, password }),
+                credentials: "include", 
             });
     
             const data = await response.json();
             if (response.ok) {
                 console.log("Login successful:", data);
-    
-                // Postavljanje kolačića sa JWT tokenom koji dolazi iz odgovora
-                setJwtCookie(data.token);  // Podrazumevamo da token dolazi kao 'data.token'
-    
-                // Nakon postavljanja kolačića, preusmeravamo korisnika
+                loginUser({
+                    id: data.id,
+                    username: data.username,
+                    roles: data.roles
+                })
                 navigate('/');
             } else {
                 setErrorMessage("Invalid credentials. Please try again.");
@@ -47,20 +49,14 @@ export const LoginComponent = () => {
         }
     }
     
-    // Funkcija za postavljanje kolačića
-    function setJwtCookie(token) {
-        // Ako je potrebno, možete koristiti ime kolačića koje vraća backend (npr. 'MonamourCookie')
-        const cookieName = 'MonamourCookie';  // Ovo ime preuzimate iz odgovora backend-a, kao što je postavljeno
-        const expires = new Date();
-        expires.setSeconds(expires.getSeconds() + 1800);  // Kolačić će trajati 30 minuta
-    
-        document.cookie = `${cookieName}=${token}; path=/; expires=${expires.toUTCString()}; Secure; HttpOnly; SameSite=Strict`;
-        console.log(cookieName)
-    }
     const handleSubmit = (event) => {
         event.preventDefault(); // Zaustavlja podrazumevano ponašanje dugmeta
         handleLogin(username, password); // Poziva asinhronu funkciju handleLogin
     };
+
+    useEffect(() => {
+        console.log("Test: ",loginUser.id)
+    },)
     return (
         <div className="login-page">
             <img src={backroundImage} alt="Monamour" />
