@@ -54,6 +54,7 @@ public class ProductController {
        List<ImageResponse> image = productService.getProductImages(id);
         return ResponseEntity.ok(image);
     }
+    
     @GetMapping("/productMainImage")
     public ResponseEntity<List<MainImageResponse>> getProductMainImage() throws IOException {
         List<MainImageResponse> mainImage = productService.getMainImage();
