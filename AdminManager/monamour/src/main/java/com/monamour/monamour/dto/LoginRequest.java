@@ -1,12 +1,15 @@
 package com.monamour.monamour.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 @Component
 @Getter
-public class LoginCredentials {
-    private String email;
+@Setter
+@NoArgsConstructor
+public class LoginRequest {
+    private String username;
     private String password;
-
 }

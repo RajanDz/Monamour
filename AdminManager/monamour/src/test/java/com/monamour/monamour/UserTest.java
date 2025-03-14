@@ -43,11 +43,14 @@ public class UserTest {
 
     @Test
     void addRoleToUser(){
-        Optional<User> user = userRepo.findById(1);
-        Optional<Role> findRole = roleRepo.findById(1);
+        Optional<User> user = userRepo.findById(86);
+        Optional<Role> findRole = roleRepo.findById(2);
         Set<Role> roles = new HashSet<>();
         roles.add(findRole.get());
         user.get().setRoles(roles);
+        for (Role role : roles) {
+            logger.info(role.toString());
+        }
         userRepo.save(user.get());
     }
 

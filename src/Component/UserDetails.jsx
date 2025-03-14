@@ -29,6 +29,8 @@ export const UserDetails = () => {
                 headers: {
                     'Content-type': 'application/json'
                 },
+                credentials: 'include'
+
             });
             if (response.ok){
                 const data = await response.json();
@@ -52,6 +54,7 @@ export const UserDetails = () => {
                 headers: {
                     'Content-type': 'application/json',
                 },
+                credentials: 'include'
             });
         
             console.log("Response status:", response.status);
@@ -81,6 +84,8 @@ export const UserDetails = () => {
                 headers: {
                     'Content-type': 'application/json',
                 },
+                credentials: 'include'
+
             });
             if (response.ok) {
                 const data = await response.json();
@@ -100,7 +105,9 @@ export const UserDetails = () => {
                  method: "GET",
                 headers: {
                     'Content-type': 'application/json'
-                }
+                },
+                credentials: 'include'
+
             });
             if (response.ok) {
                 const data = await response.json();
@@ -118,7 +125,9 @@ export const UserDetails = () => {
                 method: "GET",
                 headers: {
                     'Content-type': 'application/json'
-                }
+                },
+                credentials: 'include'
+
             });
             if (response.ok) {
                 const data = await response.json();
@@ -137,6 +146,8 @@ export const UserDetails = () => {
                 headers: {
                     'Content-type': 'application/json',
                 },
+                credentials: 'include'
+
             })
             if (response.ok){
                 const data = await response.json();
@@ -163,6 +174,8 @@ export const UserDetails = () => {
                         id: user.id,
                         [field]: tempValue,
                     }),
+                    credentials: 'include'
+
                 });
                 if (response.ok){
                     const data = await response.json();

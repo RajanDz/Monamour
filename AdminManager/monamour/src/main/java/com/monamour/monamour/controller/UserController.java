@@ -9,10 +9,12 @@ import com.monamour.monamour.entities.User;
 import com.monamour.monamour.entities.UserLog;
 import com.monamour.monamour.service.RoleService;
 import com.monamour.monamour.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +25,7 @@ import java.util.List;
 
 @RestController()
 @RequestMapping("/api")
+@CrossOrigin(origins = "*") // Dozvoljava CORS za sve domene
 public class UserController {
 
     private final UserService userService;
@@ -30,6 +33,8 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
+//    @PreAuthorize("hasRole('Emplooyer')")
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
@@ -64,7 +69,22 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while saving user.");
         }
     }
+    @GetMapping("/info")
+    public ResponseEntity<String> getRequestInfo(HttpServletRequest request, @RequestParam(name = "name") String name) {
+        String method = request.getMethod();
+        String url = String.valueOf(request.getRequestURL());
+        String uri = request.getRequestURI();
+        String queryString = request.getQueryString();
+        String userAgent = request.getHeader("User-Agent");
+        String ipAddress = request.getRemoteAddr();
 
+        return ResponseEntity.ok("Method: " + method +
+                "\nURL: " + url +
+                "\nURI: " + uri +
+                "\nQuery: " + queryString +
+                "\nUser-Agent: " + userAgent +
+                "\nIP: " + ipAddress);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginCredentials loginCredentials) {
@@ -96,5 +116,10 @@ public class UserController {
     public ResponseEntity<Integer> getSumOfNewUsers() {
         Integer sum = userService.sumOfUserRegisteredInLastMonth();
         return ResponseEntity.ok(sum);
+    }
+    @PostMapping("/findUsersByFilter")
+    public ResponseEntity<List<User>> findUsersByFilter(@RequestParam(name = "userId",required = false) Integer userId, @RequestParam(name = "filter",required = false) String filter) {
+        List<User> findUsers = userService.findUserByFilter(userId, filter);
+        return ResponseEntity.ok(findUsers);
     }
 }

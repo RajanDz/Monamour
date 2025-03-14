@@ -7,7 +7,6 @@ body {
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
-    background-color: #f4f4f4;
     overflow: auto;
 }
 
@@ -118,6 +117,47 @@ body {
     cursor: pointer;
     display: flex;
     margin-bottom: 7px;
+}
+.image-container {
+    position: relative;
+}
+.more-details {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background-color: #1c1b1b;
+    color: #ffffff;
+    cursor: pointer;
+}
+.details-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    justify-content: center;
+    top: 50px;
+    right: 1px;
+
+    background-color: white;
+    height: auto;
+    width: auto;
+    padding: 5px;
+    border-radius: 5px;
+}
+.details-container button {
+    background-color: white;
+    border: 1px solid black;
+
+    margin-top: 7px;
+    cursor: pointer;
+}
+.details-container button:hover {
+    background-color: #333;
+    color: white;
+}
+.more-details:hover {
+    background-color: #393737;
 }
 .replace-button:hover {
     background-color: #767070;

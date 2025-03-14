@@ -18,10 +18,18 @@ export const ProductDetails = () => {
     const [price, setPrice] = useState("");
     const [message, setMessage] = useState(""); // Poruka za korisnika
     const [replaceImage, setReplaceImage] = useState([]);
+    const [newPhotos, setNewPhotos] = useState([]);
     const [replacedImageId, setReplacedImageId] = useState(null);
+    const [selectedImageId, setSelectedImageId] = useState(null);
+
+
     const handleFileChange = (event) => {
         setReplaceImage((prevImages) => [...prevImages, ...Array.from(event.target.files)])
     }
+    const addPhotos = (event) => {
+        setNewPhotos((prevImages) => [...prevImages, ...Array.from(event.target.files)]);
+    };
+    
     async function fetchProductDetails() {
         try {
             const response = await fetch(`http://localhost:8080/api/findProduct/${id}`, {
@@ -57,13 +65,11 @@ export const ProductDetails = () => {
             });
 
             if (response.ok) {
-                const data = await response.json(); // Receiving data as an array of objects
+                const data = await response.json(); 
                 console.log('Received data: ', data);
-                // Store base64Image and productId together in the images array
                 const imageList = data.map((item) => ({
                     imageId: item.imageId,
                     base64Image: item.base64Image
-                     // Ensure productId is included
                 }));
                 setImages(imageList);
             } else {
@@ -73,7 +79,32 @@ export const ProductDetails = () => {
             console.log("Error happened: ", error);
         }
     }
-    
+    async function uploadPhoto() {
+        const formData = new FormData();
+        formData.append("id", id);
+        if (newPhotos.length > 0) {
+            newPhotos.forEach((image) => {
+                formData.append("images", image);
+            });
+        }
+        try {
+            const response = await fetch("http://localhost:8080/api/uploadPhoto", {
+                method: 'POST',
+                body: formData,
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Photos uploaded successfully:", data);
+                fetchProductDetails();  // Osveži detalje proizvoda
+                getProductImages();    // Osveži slike proizvoda
+                setNewPhotos([]);
+            } else {
+                console.log("Failed to upload photos");
+            }
+        } catch (error) {
+            console.error('There was an error!', error);
+        }
+    }
     async function editProductDetails() {
         const formData = new FormData();
             formData.append("id", id);
@@ -82,12 +113,11 @@ export const ProductDetails = () => {
             formData.append("size", size);
             formData.append("price", price);
             if (replaceImage.length > 0){
-                formData.append("replacedImage", replacedImageId )
+                formData.append("replacedImage", replacedImageId)
                 replaceImage.forEach((image) => {
                     formData.append("images", image);
                 })
             }
-            
         try {
             const response = await fetch('http://localhost:8080/api/editProductDetails', {
                 method: 'POST',
@@ -96,12 +126,32 @@ export const ProductDetails = () => {
             if (response.ok){
                 const data = await response.json();
                 fetchProductDetails();
+                getProductImages();
+                setReplaceImage([]); 
+                setReplacedImageId(null); 
                 console.log(data);
+                replaceImage.forEach((image) => {
+                    console.log("Slike: ",image);
+                })
             }else {
                 console.log("Failed to edit details of product");
             }
         } catch (error) {
             console.error('There was an error!', error);
+        }
+    }
+    async function setImageAsDefault(imageid) {
+        try {
+            const response = await fetch(`http://localhost:8080/api/setImageAsDefault/${imageid}`, {
+                method: 'GET'
+            });
+            if (response.ok){
+                console.log("You set default image with id: ", imageid);
+            }else {
+                console.log("Error happen while trying to set image as deafault with id: ", imageid);
+            }
+        } catch (error) {
+            console.log('Error happen: ', error);
         }
     }
     async function deleteImageOfProduct(imageId) {
@@ -111,6 +161,7 @@ export const ProductDetails = () => {
             });
             if (response.ok){
                 const data = await response.json();
+                getProductImages();
                 console.log('Successfully deleted: ', data);
             } else {
                 console.log('Error happen');
@@ -120,11 +171,7 @@ export const ProductDetails = () => {
         }
         
     }
-    const saveImageId = (imageId) => {
-        setReplacedImageId(imageId);
-        console.log("Test id-a: ",imageId);
-    }
-
+   
     useEffect(() => {
         if (!user) {
             console.log("You need to be logged in to access this page");
@@ -134,7 +181,11 @@ export const ProductDetails = () => {
             getProductImages();
         }
     }, [user, navigate]);
-
+    useEffect(() => {
+        if (newPhotos.length > 0) {
+            uploadPhoto();  // Pozivamo uploadPhoto samo kad se dodaju nove slike
+        }
+    }, [newPhotos]); 
     return (
         <div className="product-details-container">
             <div className="product-info">
@@ -150,21 +201,31 @@ export const ProductDetails = () => {
                                 <li 
                                 className='image'
                                 key={index}>
+                                    <div className="image-container">
                                     <img src={image.base64Image} alt={`Product Image ${index + 1}`} />
-                                    <div className='edit-photo-button'>
-                                        <input 
+                                    <button 
+                                    onClick={() => setSelectedImageId(prevId => prevId === image.imageId ? null: image.imageId)}
+                                    className="more-details">
+                                    <span className="material-symbols-outlined">menu</span>
+                                    </button>
+                                    {selectedImageId === image.imageId && (
+                                        <div className='details-container'>
+                                            <button onClick={() => setImageAsDefault(image.imageId)}>Set as profile image</button>
+                                            <input 
                                         type="file" 
                                         multiple
                                         hidden
                                         id='fileInput'
                                         onChange={handleFileChange}
                                         />
-                                        <button
-                                        className='replace-button'
+                                            <button
                                          onClick={() => {
-                                            saveImageId(image.imageId);
+                                            setReplacedImageId(image.imageId);
                                             document.getElementById('fileInput').click()}}>Replace photo</button>
                                             <button onClick={() => deleteImageOfProduct(image.imageId)}>Delete photo</button>
+
+                                        </div>
+                                    )}
                                     </div>
                                 </li>
                             ))}
@@ -205,7 +266,16 @@ export const ProductDetails = () => {
                             placeholder="Product Price"
                         />
                         <button onClick={editProductDetails}>Save Changes</button>
-
+                        <input 
+                                        type="file" 
+                                        multiple
+                                        hidden
+                                        id='choosePhoto'
+                                        onChange={addPhotos}
+                                        />
+                        <button
+                        onClick={() => {
+                            document.getElementById('choosePhoto').click()}}>Add photo</button>
                         {message && <p className="message">{message}</p>}
                     </>
                 )}

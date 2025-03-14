@@ -11,3 +11,8 @@ spring:
 jpa:
   show-sql: true
   ddl-auto: update
+
+app:
+  jwtSecret: ThisIsASecretKeyWithAtLeast32CharactersKeyWithAtLeast32CharactersKeyWithAtLeast32Characters
+  jwtExpirationMs: 300000000
+  jwtCookieName: MonamourCookie

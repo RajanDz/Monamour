@@ -7,13 +7,11 @@ import com.monamour.monamour.entities.ProductImage;
 import com.monamour.monamour.entities.ProductsActivityLog;
 import com.monamour.monamour.repository.ProductRepo;
 import com.monamour.monamour.service.ProductService;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,10 +38,12 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
     @PostMapping("/deleteAllProducts")
-    public ResponseEntity<Map<String,String>> deleteAllProducts(@RequestBody ProductsDeleteProcces productsDeleteProcces) {
+    public ResponseEntity<Map<String,String>> deleteAllProducts(@RequestBody ProductsDeleteProcces productsDeleteProcces) throws IOException {
         Map<String, String> response = productService.deleteAll(productsDeleteProcces); 
         return ResponseEntity.ok(response);
     }
+
+    @PreAuthorize("hasRole('ROLE_Emplooyer')")
     @PostMapping("/deleteOneProduct")
     public ResponseEntity<Map<String,String>> deleteOneProduct(@RequestBody ProductsDeleteProcces productsDeleteProcces) {
         Map<String,String> response = productService.deleteProductById(productsDeleteProcces);
@@ -86,9 +86,20 @@ public class ProductController {
         Product product = productService.editProductDetails(id,name,color,size,price,images,replacedImageId);
         return ResponseEntity.ok(product);
     }
+    @PostMapping("/uploadPhoto")
+    public ResponseEntity<ProductImage> uploadPhoto (@RequestParam(name = "id") Integer id,
+                                                @RequestParam(name = "images") MultipartFile [] images) throws IOException {
+        ProductImage productImage = productService.uploadPhoto(id, images);
+        return ResponseEntity.ok(productImage);
+    }
     @GetMapping("/productLogs")
     public ResponseEntity<List<ProductsActivityLog>> getAllProductLogs () {
         List<ProductsActivityLog> logs = productService.getAllProductsActivityLog();
         return ResponseEntity.ok(logs);
+    }
+    @GetMapping("/setImageAsDefault/{imageId}")
+    public ResponseEntity<ProductImage> setImageAsDefault (@PathVariable Integer imageId) throws IOException {
+        ProductImage productImage = productService.setImageAsDefault(imageId);
+        return ResponseEntity.ok(productImage);
     }
 }

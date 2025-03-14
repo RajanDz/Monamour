@@ -10,7 +10,6 @@ import java.util.Set;
 @Table(name = "user")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @ToString
 public class User {
@@ -23,6 +22,8 @@ public class User {
     private String name;
     @Column(name = "lastname")
     private String lastname;
+    @Column(name = "username")
+    private String username;
     @Column(name = "email")
     private String email;
     @Column(name = "password")
@@ -39,4 +40,17 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id"))
         Set<Role> roles = new HashSet<>();
+
+//    public User(String name, String lastname, String gender,String phoneNumber, String password, String email, String username, String profileImage) {
+//        this.name = name;
+//        this.lastname = lastname;
+//        this.roles = roles;
+//        this.gender = gender;
+//        this.profileImage = profileImage;
+//        this.phoneNumber = phoneNumber;
+//        this.password = password;
+//        this.email = email;
+//        this.username = username;
+//        this.profileImage = profileImage;
+//    }
 }

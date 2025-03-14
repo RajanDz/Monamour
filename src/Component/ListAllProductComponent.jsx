@@ -30,9 +30,10 @@ export const ListAllProduct = () => {
                     'Content-type': 'application/json',
                 },
                 body: JSON.stringify({
-                    user_id: user.user.id,
+                    user_id: user.id,
                     product_id: product_id
-                })
+                }),
+                credentials: 'include'
             })
             if (response.status === 200){
                 const data = await response.json();
@@ -55,9 +56,11 @@ export const ListAllProduct = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    user_id: user.user.id,  // Koristite user.id direktno
+                    user_id: user.id,  // Koristite user.id direktno
                     reason: reason      // Prolazimo razlog za brisanje
-                })
+                }),
+                credentials: 'include', // Omogućava slanje cookies sa zahtevima
+
             });
     
             if (response.ok) {
@@ -79,6 +82,8 @@ export const ListAllProduct = () => {
                 headers: {
                     'Content-type': 'application/json',
                 },
+                credentials: 'include', // Omogućava slanje cookies sa zahtevima
+
             });
     
             if (response.ok) {
@@ -99,15 +104,21 @@ export const ListAllProduct = () => {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
-                }
+                },
+                credentials: 'include', // Omogućava slanje cookies sa zahtevima
             });
 
-            if (!response.ok){
-                throw new Error('Network response was not ok');
+            if (response.ok){
+                const data = await response.json();
+                console.log(data);
+                setProducts(data);
+            } else if (response.status === 401){
+                navigate('/login');
+                console.log("You need to be logged in to acces this page");
+            } else {
+                console.log("error:", response.status);
             }
-            const data = await response.json();
-            console.log(data);
-            setProducts(data);
+            
         } catch (error) {
             console.error('There was an error!', error);
         }
@@ -154,7 +165,7 @@ return (
     </div>
 
     {deleteButton && (
-    <div className='deleteProducts'>
+    <div className='delete-products'>
         <div>
             <input 
                 type="text"
