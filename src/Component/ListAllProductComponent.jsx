@@ -47,7 +47,6 @@ export const ListAllProduct = () => {
         }
     }
     async function deleteProducts() {
-        console.log(user.user.id)
     
         try {
             const response = await fetch('http://localhost:8080/api/deleteAllProducts', {
