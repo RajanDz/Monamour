@@ -1,0 +1,91 @@
+.product-page{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+    overflow: auto;
+    box-sizing: border-box;
+}
+.product-details{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-top: 220px;
+    padding: 20px;
+}
+.image-container img{
+    width: 500px;
+    height: 667px;
+    object-fit: cover;
+    object-position: 50% 50%;
+    border-radius: 5px;
+}
+.product-info {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-left: 40px;
+}
+
+.size-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.size-container button {
+    border: 1px solid black;
+    background-color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+.size-container button:hover{
+    box-shadow: 1px 1px 5px black;
+}
+.colors {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #2F2E2E;
+}
+.circle {
+    align-items: center;
+    width: 30px;          /* Postavi širinu kružića */
+    height: 30px;         /* Postavi visinu kružića (isto kao širinu) */
+    border-radius: 50%;   /* Zaokružuje ivice da bi napravio kružić */
+    margin-left: 10px;
+    cursor: pointer;
+}
+.circle:hover{
+    box-shadow:1px 1px 7px rgb(185, 185, 185);
+}
+.quantity {
+    position: relative;
+    top: 0;
+    align-items: center;
+    font-size: large;
+    height: 30px;
+    width: 60px;
+}
+.add-to-cart{
+    display: flex;
+    margin-top: 20px;
+    border: none;
+    color: white;
+    background-color: #2F2E2E ;
+    padding: 15px 45px;
+}
+h1{
+    color: rgb(0, 0, 0);
+}
+
+@media (max-width:786px) {
+    .product-details{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+}

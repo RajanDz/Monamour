@@ -1,0 +1,103 @@
+.products-page{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+    overflow: auto; /* Dozvoljava scroll ako je potrebno */
+    box-sizing: border-box;
+}
+.represent-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 80px;
+}
+.represent-image img {
+    width: 90%;
+    max-height: 250px;
+    object-fit: cover;
+}
+.product-and-filter-container {
+    display: flex;
+    justify-content: center;
+}
+.search-filter{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-left: 20px;
+}
+.search-filter h1 {
+    border-bottom: 2px solid rgb(0, 0, 0);  /* Dodaje liniju ispod */
+}
+.search-filter p {
+    margin-top: 5px;
+    cursor: pointer;
+}
+.filters {
+    margin-top: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+}
+.filters p:hover {
+    box-shadow: 1px 1px 5px black;
+}
+.products-and-filter {
+    display: inline-grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    width: 80%;
+}
+.product-name{
+    border-bottom: 1px solid black;
+}
+.product-card{
+    display: inline-grid;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    width: 80%;
+}
+.product{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    margin-top: 10px;
+}
+.product p {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.product:hover{
+    box-shadow: 1px 1px 15px black;
+}
+.product img {
+    width: 100%;
+    height: 350px;
+}
+.product-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 10px;
+}
+.product p {
+    margin-top: 1px;
+}
+
+@media (max-width: 786px) {
+    .product-and-filter-container{
+        flex-direction: column;
+        align-items: center;
+    }
+}
