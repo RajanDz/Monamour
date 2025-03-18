@@ -11,13 +11,13 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    margin-top: 220px;
+    margin-top: 100px;
     padding: 20px;
 }
 .image-container img{
     width: 500px;
     height: 667px;
-    object-fit: cover;
+    object-fit: fill;
     object-position: 50% 50%;
     border-radius: 5px;
 }
@@ -76,12 +76,25 @@
     color: white;
     background-color: #2F2E2E ;
     padding: 15px 45px;
+    cursor: pointer;
 }
 h1{
     color: rgb(0, 0, 0);
 }
 
 @media (max-width:786px) {
+    .product-page{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .image-container img{
+        width: 300px;
+        height: 467px;
+        object-fit: fill;
+        border-radius: 5px;
+    }
     .product-details{
         display: flex;
         align-items: center;

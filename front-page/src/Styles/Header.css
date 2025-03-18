@@ -2,7 +2,6 @@ header {
     display: flex;
     position: fixed;
     align-items: center;
-    position: fixed;
     width: 100%;
     justify-content: space-between;
     background-color: rgb(255, 255, 255);
@@ -63,6 +62,7 @@ header {
 .login-option {
     display: flex;
     align-items: center;
+    margin-right: 30px;
 }
 .header-navigation p, span {
     cursor: pointer;
