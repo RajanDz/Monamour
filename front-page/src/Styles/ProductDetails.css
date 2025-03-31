@@ -85,11 +85,9 @@ h1{
 @media (max-width:786px) {
     .product-page{
         display: flex;
-        align-items: center;
-        justify-content: center;
         flex-direction: column;
     }
-    .image-container img{
+    .product-details img{
         width: 300px;
         height: 467px;
         object-fit: fill;
@@ -100,5 +98,16 @@ h1{
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        width: 100%;
     }
+    .product-info{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-left: 0;
+    }
+    .product-details p, button, input{
+    }
+   
 }

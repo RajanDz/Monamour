@@ -142,3 +142,21 @@ a {
     color: black;
     text-decoration: none;
 }
+@media screen and (max-width: 786px) {
+    .dropdown-menu{
+    visibility: hidden;
+    position: fixed;
+    top: 1px; /* Podesi poziciju menija */
+    left: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    height: 100%;
+    width: 100%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .dropdown-menu.visible{
+        opacity: 1;
+        visibility: visible;
+    }
+}

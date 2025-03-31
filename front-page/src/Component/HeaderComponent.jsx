@@ -30,12 +30,9 @@ export const HeaderComponent = () => {
             </div>
                 <div className='header-navigation'>
                     <div className='cart-option'>
-                    <Link className='login-nav' to={'/cart'}>Cart</Link>
-
                     <span className="material-symbols-outlined">shopping_cart</span>
                     </div>
                     <div className='login-option'>
-                    <Link className='login-nav' to={'/login'}>Login</Link>
                     <span className="material-symbols-outlined">person</span>
                     </div>
                     

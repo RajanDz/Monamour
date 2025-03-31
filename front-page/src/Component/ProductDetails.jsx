@@ -54,22 +54,20 @@ export const ProductDetails = () => {
     useEffect(() => {
         fetchProductDetails();
         fetchProductImages();
-    },[])
+    },[id])
     return (
         <div className='product-page'>
             <div className="product-details">
-                <div className='image-container'>
                     {images.length > 0 ? (
                     <img src={images[0].base64Image} alt="photo" />
                     ):(
                         <p>Loading image...</p>
                     )}
-            </div>
+
                     <div className='product-info'>
                                 <h1>{name}</h1>
-                                <p>{price}EUR</p>
+                                <p>{price}EUR</p>  
                                 <p>Size:</p>
-
                             <div 
                             className='size-container'
                             >

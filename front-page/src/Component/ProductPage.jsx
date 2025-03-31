@@ -8,7 +8,6 @@ export const ProductPage = () => {
     const [showFilters, setShowFilter] = useState(null);
     const [products, setProducts] = useState([]);
     const [mainProductImage, setMainProductPhoto] = useState([]);
-    const availableSizes = ['XS','S', 'M', 'L', 'XL'];
     const vissibilityButton = (element) => {
         if (showFilters === element) {
             setShowFilter(null);
@@ -68,67 +67,46 @@ export const ProductPage = () => {
 
     return (
         <div className='products-page'>
-            <div className="represent-image">
+            {/* <div className="represent-image">
                 <img src={image} alt="photo" />
+            </div> */}
+            <div className='filters-and-sort-container'>
+                <div className='sort-by'>
+                <p onClick={() => vissibilityButton('sort-by')}>SORT BY</p>
+                {showFilters === 'sort-by' && (
+                    <div className='sort-filters'>
+                        <p>Low to high price</p>
+                    </div>
+                )}
+                </div>
+
+                <div className='sort-by'>
+                <p onClick={() => vissibilityButton('filters')}>FILTERS</p>
+                {showFilters === 'filters' && (
+                    <div className='sort-filters'>
+                        <p>Low to high price</p>
+                    </div>
+                )}
+                </div>
             </div>
 
+
+
             <div className='product-and-filter-container'>
-                <div className='search-filter'>
-                    <h1>Search filters</h1>
-                    <div className='filters'>
-                        <p>All products</p>
-                        <p>Products on sale</p>
-                        <div></div>
-                        <p onClick={() => vissibilityButton('color')}>Color</p>
-                        <div className={`choose-color ${showFilters === 'color' ? 'visible': ''}`}>
-                                <p
-                                className='circle'
-                                style={{backgroundColor: 'black'}}></p>
-                                <p
-                                className='circle'
-                                style={{backgroundColor: 'white'}}></p>
-                                <p
-                                className='circle'
-                                style={{backgroundColor: 'bisque'}}></p>
-                                <p
-                                className='circle'
-                                style={{backgroundColor: 'pink'}}></p>
-                                 <p
-                                className='circle'
-                                style={{backgroundColor: 'pink'}}></p>
-                                 <p
-                                className='circle'
-                                style={{backgroundColor: 'pink'}}></p>
-                                 <p
-                                className='circle'
-                                style={{backgroundColor: 'pink'}}></p>
-                                 <p
-                                className='circle'
-                                style={{backgroundColor: 'pink'}}></p>
-                        </div>
-                        <p onClick={() => vissibilityButton('size')}>Size</p>
-                        
-
-                        <div className={`choose-size ${showFilters === 'size' ? 'visible' : ''}`}>                            
-                                {availableSizes.map((size,index) => (
-                                    <p key={index}>{size}</p>
-                                ))}
-                        </div>
-                    </div>
-                    <button>Search by filters</button>
-
-                </div>
-                <div className='product-card'>
                     {products.map((product) => (
                         <div className='product' key={product.id}>
                             <Link to={`/product/${product.id}`}>
-                                <img src={getProductImage(product.id)} alt="product" />
+                            <div className='image-box'>
+                            <img src={getProductImage(product.id)} alt="product" />
+                            <span className="material-symbols-outlined">
+                            add
+                            </span>
+                            </div>
                                 <p className='product-name'>{product.name}</p>
-                                <p>{product.price} EUR</p>
+                                <p>{product.price}€</p>
                             </Link>
                         </div>
                     ))}
-                </div>
             </div>
         </div>
     );
