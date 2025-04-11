@@ -14,12 +14,33 @@
     margin-top: 100px;
     padding: 20px;
 }
+.image-container{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .image-container img{
     width: 500px;
     height: 667px;
     object-fit: fill;
     object-position: 50% 50%;
     border-radius: 5px;
+}
+.more-photos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 10px;
+}
+.more-photos .material-symbols-outlined{
+    padding: 2px;
+    background-color: white;
+    border-radius: 50%;
+}
+.more-photos .material-symbols-outlined:hover{
+    color: gray;
 }
 .product-info {
     display: flex;
@@ -41,16 +62,19 @@
 .size-container button:hover{
     box-shadow: 1px 1px 5px black;
 }
-.colors {
+.product-details .colors {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     margin-top: 20px;
     padding: 5px;
     border-radius: 5px;
     background-color: #2F2E2E;
 }
 .circle {
+    position: relative;
+    right: 5px;
+    justify-content: center;
     align-items: center;
     width: 30px;          /* Postavi širinu kružića */
     height: 30px;         /* Postavi visinu kružića (isto kao širinu) */
@@ -60,6 +84,11 @@
 }
 .circle:hover{
     box-shadow:1px 1px 7px rgb(185, 185, 185);
+}
+.quantity-input{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .quantity {
     position: relative;
@@ -107,7 +136,6 @@ h1{
         width: 100%;
         margin-left: 0;
     }
-    .product-details p, button, input{
-    }
+
    
 }

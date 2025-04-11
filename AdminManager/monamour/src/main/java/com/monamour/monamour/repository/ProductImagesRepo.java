@@ -10,4 +10,5 @@ public interface ProductImagesRepo extends JpaRepository<ProductImage, Integer> 
     List<ProductImage> findByProductId(Integer id);
     List<ProductImage> findByIsMain(boolean isMain);
 
+    List<ProductImage> findByProductIdAndIsMain(Integer productId, boolean isMain);
 }

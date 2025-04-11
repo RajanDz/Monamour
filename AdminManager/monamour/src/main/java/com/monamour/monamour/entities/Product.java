@@ -28,6 +28,9 @@ public class Product {
     @Column(name = "price")
     private  Double price;
 
+    @Column(name = "type")
+    private  String type;
+
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 

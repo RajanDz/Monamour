@@ -6,7 +6,7 @@ spring:
       name: MySQL Connection
       url: jdbc:mysql://localhost:3306/monamour
       username: root
-      password: PgSator05
+      password: pgsator05
       driver-class-name: com.mysql.cj.jdbc.Driver
 jpa:
   show-sql: true

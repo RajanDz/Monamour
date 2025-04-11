@@ -1,14 +1,9 @@
 package com.monamour.monamour.service;
 
 
-import com.monamour.monamour.dto.LoginCredentials;
-import com.monamour.monamour.dto.LoginResponse;
-import com.monamour.monamour.dto.Registration;
-import com.monamour.monamour.dto.UserDetailsEdit;
-import com.monamour.monamour.entities.User;
-import com.monamour.monamour.entities.UserLog;
-import com.monamour.monamour.repository.UserLogRepo;
-import com.monamour.monamour.repository.UserRepo;
+import com.monamour.monamour.dto.*;
+import com.monamour.monamour.entities.*;
+import com.monamour.monamour.repository.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,9 +25,15 @@ public class UserService {
 
     private final UserRepo userRepo;
     private final UserLogRepo userLogRepo;
-    public UserService(UserRepo userRepo, UserLogRepo userLogRepo) {
+    private final OrderRepo orderRepo;
+    private final OrderedProductsRepo orderedProductsRepo;
+    private final ProductRepo productRepo;
+    public UserService(UserRepo userRepo, UserLogRepo userLogRepo, OrderRepo orderRepo, OrderedProductsRepo orderedProductsRepo, ProductRepo productRepo) {
         this.userRepo = userRepo;
         this.userLogRepo = userLogRepo;
+        this.orderRepo = orderRepo;
+        this.orderedProductsRepo = orderedProductsRepo;
+        this.productRepo = productRepo;
     }
     public List<User> getAllUsers() {
         return userRepo.findAll();
@@ -43,7 +44,7 @@ public class UserService {
     public UserLog userLog (Integer userId){
         return userLogRepo.findByUserId(userId).orElseThrow();
     }
-    private String defaultPath = "C:/Users/Rajan/Desktop/Galerija";
+    private String defaultPath = "C:/Users/Rajan/Desktop/Galerije";
 
     public String getProfileImage(Integer userId) {
         Optional<User> findUser = userRepo.findById(userId);
@@ -155,4 +156,38 @@ public class UserService {
     public boolean isEmail(String input){
         return input.contains("@");
     }
+
+
+    public String createOrder(CreateOrder createOrder){
+        User user = userRepo.findById(createOrder.getUserId()).get();
+        Order order = new Order();
+        order.setUser(user);
+        order.setCreatedAt(LocalDateTime.now());
+        order.setShippingAddress(createOrder.getShippingAddress());
+        order.setTotalPrice(createOrder.getTotalPrice());
+        order.setStatus("PENDING");
+        orderRepo.save(order);
+
+
+        for (ProductShippingDetails product : createOrder.getProducts()) {
+            Product findProduct = productRepo.findById(product.getProductId()).get();
+            OrderedProducts orderedProducts = new OrderedProducts();
+            orderedProducts.setOrder(order);
+            orderedProducts.setProduct(findProduct);
+            orderedProducts.setQuantity(product.getQuantity());
+            orderedProducts.setPriceOfProducts(findProduct.getPrice());
+            orderedProductsRepo.save(orderedProducts);
+        }
+        return "Successfully created";
+    }
+    public List<Order> getOrders(Integer userId) {
+        User user = userRepo.findById(userId).get();
+        List<Order> getOrders = orderRepo.findByUserAndStatus(user,"PENDING");
+        return getOrders;
+    }
+
+    public List<OrderedProducts> getProduct(Integer orderId) {
+        return  orderedProductsRepo.findByOrderId(orderId);
+    }
+
 }

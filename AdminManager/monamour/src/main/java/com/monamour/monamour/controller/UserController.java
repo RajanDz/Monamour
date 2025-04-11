@@ -1,12 +1,8 @@
 package com.monamour.monamour.controller;
 
 
-import com.monamour.monamour.dto.LoginCredentials;
-import com.monamour.monamour.dto.LoginResponse;
-import com.monamour.monamour.dto.Registration;
-import com.monamour.monamour.dto.UserDetailsEdit;
-import com.monamour.monamour.entities.User;
-import com.monamour.monamour.entities.UserLog;
+import com.monamour.monamour.dto.*;
+import com.monamour.monamour.entities.*;
 import com.monamour.monamour.service.RoleService;
 import com.monamour.monamour.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -121,5 +117,20 @@ public class UserController {
     public ResponseEntity<List<User>> findUsersByFilter(@RequestParam(name = "userId",required = false) Integer userId, @RequestParam(name = "filter",required = false) String filter) {
         List<User> findUsers = userService.findUserByFilter(userId, filter);
         return ResponseEntity.ok(findUsers);
+    }
+    @PostMapping("/confirmCheckout")
+    public ResponseEntity<String> confirmCheckout(@RequestBody CreateOrder createOrder) {
+        String checkout = userService.createOrder(createOrder);
+        return ResponseEntity.ok(checkout);
+    }
+    @GetMapping("/getOrders/{userId}")
+    public ResponseEntity<List<Order>> getOrders(@PathVariable  Integer userId) {
+        List<Order> order = userService.getOrders(userId);
+        return ResponseEntity.ok(order);
+    }
+    @GetMapping("/getProductsOfOrder/{orderId}")
+    public ResponseEntity<List<OrderedProducts>> getProductsOfOrder(@PathVariable Integer orderId) {
+        List<OrderedProducts> products = userService.getProduct(orderId);
+        return ResponseEntity.ok(products);
     }
 }

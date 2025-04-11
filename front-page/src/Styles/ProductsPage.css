@@ -6,6 +6,16 @@
     overflow: visible; /* Dozvoljava scroll ako je potrebno */
     box-sizing: border-box;
 }
+.dim-background::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Tamna providna pozadina */
+    z-index: 5;
+}
 .represent-image {
     display: flex;
     align-items: center;
@@ -50,48 +60,149 @@
     border-bottom: 1px solid black;
 }
 .filters-and-sort-container {
-    position: fixed;
+    position: absolute;
     height: 50px;
     top: 60px;
     right: 0;
     left: 0;
     display: flex;
+    align-items: center;
     justify-content: flex-end;
     background-color: white;
     z-index: 1000;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 .sort-filters{
-    border-radius: 5px;
+    width: fit-content;
     background-color: white;
     position: absolute;
     top: 50px;
+    right: 90px;
+    box-sizing: border-box; /* Omogućava da padding ne utiče na širinu */
+    border: 1px solid rgb(102, 101, 101);
+    border-radius: 5px;
 }
-
-.filters-and-sort-container p {
-    cursor: pointer;
-    color: rgb(116, 115, 115);
-    margin-top: 0px;
-    margin-bottom: 0px;
+.sort-filters p {
     padding: 5px;
-    height: 100%;
-    font-size: 20px;
+    box-sizing: border-box; /* Omogućava da padding ne utiče na širinu */
+    width: 100%;
+    font-size: 17px;
 }
-.filters-and-sort-container p:hover{
-    color: #000;
+.sort-filters p:hover{
+    width: fit-content;
+    background-color: #dddddd54;
+}
+.product-navigation {
+    display: flex;
+}
+.product-navigation p:hover{
+    border-bottom: 1px solid black;
 }
 .sort-by {
     display: flex;
     justify-content: center;
-    flex-direction: column;
+    margin-right: 25px;
+}
+.sort-by p {
+    cursor: pointer;
+    color: rgb(82, 81, 81);
+    margin-left: 20px;
 }
 
+.show-filters {
+    position: relative;
+}
+.filters-element {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0px;
+    width: 300px;
+    height: 100%;
+    background-color: #ffffff;
+    box-shadow: 1px 10px 20px rgba(0, 0, 0, 0.6); /* Crni shadow sa blagim blur efektom */
+}
+.header-filters {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.title-filters{
+    position: relative;
+    left: 10px;
+}
+.title-filters:hover{
+    cursor: pointer;
+    color: rgb(85, 85, 85);
+}
+
+.close-filters {
+    position: relative;
+    right: 10px;
+}
+.header-filters span:hover{
+    cursor: pointer;
+    color: rgb(85, 85, 85);
+}
+.filters{
+    position: relative;
+    left: 10px;
+}
+.type-elements {
+    position: relative;
+}
+.type-elements p {
+    width: fit-content;
+}
+.type-elements p:hover{
+        cursor: pointer;
+        text-shadow: 1px 1px 6px rgba(66, 65, 65, 0.8);
+}
+.size {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid black;
+    width: fit-content;
+    cursor: pointer;
+}
+.available-sizes{
+    display: flex;
+    align-items: center;
+}
+.available-sizes p{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    color: #ffffff;
+    background-color: #2F2E2E;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-left: 5px;
+}
+.available-sizes p:hover{
+    cursor: pointer;
+    color: rgba(170, 166, 166, 0.747);
+}
+.colors {
+    display: flex;
+}
+.colors p{
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    margin-left: 5px;
+}
+.colors p:hover{
+    box-shadow: 1px 1px 10px black;
+}
 .products-and-filter {
     display: flex;
     width: 100%;
 }
 
-.products-page .material-symbols-outlined{
+.product .material-symbols-outlined {
     position: absolute;
     bottom: 10px;
     right: 10px;
@@ -99,7 +210,8 @@
     border-radius: 50%;
     padding: 10px;
 }
-.products-page .material-symbols-outlined:hover {
+
+.product .material-symbols-outlined:hover {
     background-color: rgb(24, 23, 23);
     color: white;
 }
@@ -148,80 +260,26 @@
 .product p {
     margin-top: 1px;
 }
-.choose-color {
-    visibility: hidden;
-    max-height: 0;
-    opacity: 0;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    cursor: pointer;
-    border: 1px solid black;
-    background-color: rgb(94, 94, 94);
-    margin-bottom: 0px;
-    transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out;
-}
-.circle {
-    display: inline-block;
-    transition: transform 0.2s ease-in-out;
-}
-.circle:hover {
-    transform: scale(1.1); /* Blago povećanje na hover */
-}
-.choose-color.visible {
-    display: flex;
-    flex-wrap: wrap;
-    visibility: visible;
-    max-height: 100px; 
-    opacity: 1;
-}
-
-.choose-color p {
-    margin: 0;
-}
-.choose-color span {
-    margin-left: auto;
-}
-.choose-size {
-    display: flex;
-    opacity: 0;
-    max-height: 0;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    border-bottom: 1px solid black;
-    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    
-}
-.choose-size.visible {
-    max-height: 150px; /* Povećaj ako treba više prostora */
-    opacity: 1;
-}
-.choose-size p {
-    width: 30px;
-    height: 30px;
-    display: inline-block;
-    margin: 5px;
-    transition: transform 0.2s ease-in-out;
-}
-.choose-size span {
-    margin-left: auto;
-}
-
-.size-elements {
-    visibility: hidden;
-}
-.size-elements.visible {
-    visibility: visible;
-}
 @media (max-width: 786px) {
     .product-and-filter-container{
         grid-template-columns: repeat(2,minmax(auto,1fr));
     }
-
+    .available-sizes p{
+        padding: 5px;
+        height: 20px;
+        width: 20px;
+        font-size: small;
+    }
+    .colors p{
+        height: 22px;
+        width: 22px;
+    }
     .image-container {
         display: flex;
         flex-direction: column;
         width: 100%;
+    }
+    .filters-element{
+        width: 200px;
     }
 } 

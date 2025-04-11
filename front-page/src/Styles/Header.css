@@ -1,110 +1,39 @@
+/* Header */
 header {
     display: flex;
-    position: fixed;
     align-items: center;
-    width: 100%;
     justify-content: space-between;
-    background-color: rgb(255, 255, 255);
-    border: none;
-    border-radius: 1px;
-    padding: 20px;
-    box-shadow: 5px 5px 5px rgb(178, 243, 238);
-    z-index: 1000; /* Osiguraj da bude iznad ostalog sadržaja */
-}
-.satisfy-regular {
-    font-family: "Satisfy", cursive;
-    font-weight: 400;
-    font-style: normal;
-  }
-  .title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: "Satisfy", cursive;
-    font-weight: 400;
-    font-style: normal;
-    margin: 0;
-  }
-
-.logo-place{
-    display: flex;
-    align-items: center;
-}
-.header-navigation{
-    display: flex;
-    align-items: center;
-}
-.cart-option{
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-.dropdown-menu{
-    visibility: hidden;
-    position: fixed;
-    top: 1px; /* Podesi poziciju menija */
-    left: 0;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    height: 100%;
-    width: 500px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-.dropdown-menu.visible {
-    opacity: 1;
-    visibility: visible;
-}
-.header-navigation :hover{
-    border-radius: 20px;
-    background-color: rgb(237, 236, 236);
-}
-.login-option {
-    display: flex;
-    align-items: center;
-    margin-right: 30px;
-}
-.header-navigation p, span {
-    cursor: pointer;
-    margin-left: 10px;
-}
-
-p, a {aheader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;  /* Razdvaja logo i navigaciju */
     position: fixed;
     width: 100%;
     background-color: white;
     border: none;
     border-radius: 1px;
-    padding: 10px 20px;  /* Dodajte padding za bolji razmak */
+    padding: 10px 20px; /* Dodajte padding za bolji razmak */
     top: 0;
     left: 0;
-    z-index: 1000;  /* Postavite z-index da bi header bio iznad ostalih elemenata */
+    z-index: 1000; /* Postavite z-index tako da bude iznad drugih elemenata */
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
 }
 
 .title {
     display: flex;
-    flex-grow: 1;  /* Ovaj stil omogućava da title zauzme sav prostor i centrira h1 */
+    flex-grow: 1;
     align-items: center;
     justify-content: center;
-    size: 20px;
-}
-
-h1 {
     font-family: "Satisfy", cursive;
     font-weight: 400;
     font-style: normal;
-    font-size: 36px;  /* Podesite željeni font-size */
-    margin: 0;  /* Uklonite marginu */
+    font-size: 36px;
+    margin: 0;
 }
 
+/* Logo */
 .logo-place {
     display: flex;
     align-items: center;
 }
 
+/* Header navigation */
 .header-navigation {
     display: flex;
     align-items: center;
@@ -114,49 +43,180 @@ h1 {
     display: flex;
     align-items: center;
     cursor: pointer;
+    position: relative;
+    z-index: 1100; /* Povećaj z-index za korpu */
 }
 
-.header-navigation :hover {
-    border-radius: 20px;
-    background-color: rgb(237, 236, 236);
+.cart {
+    display: none;
+    flex-direction: column;
+    visibility: hidden;
+    opacity: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 1px 1px 6px black;
+    width: 300px;
+    height: 100%;
+    z-index: 2000; /* Viši z-index za korpu */
+}
+
+.cart.visible {
+    display: flex;
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1500; /* Dodaj z-index za dropdown meni */
+}
+
+.dropdown-menu.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.dropdown-menu .options p {
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+/* Cart details */
+.cart-header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid black;
+    padding: 10px;
+}
+
+.cart-header h2 {
+    margin-left: 10px;
+}
+
+.cart-header span {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+/* Products in cart */
+.products {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.products ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.show-product {
+    display: flex;
+    width: 100%; 
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.show-product img {
+    width: 110px;
+    height: 148px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+.about-product p {
+    font-size: medium;
+}
+
+.cart-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.cart-info p {
+    width: 100%;
+    border-bottom: 1px solid black;
+    margin: 10px 0;
+}
+
+.checkout-button {
+    color: white;
+    background-color: #2F2E2E;
+    width: 250px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.checkout-button:hover {
+    background-color: rgb(79, 77, 77);
 }
 
 .login-option {
     display: flex;
     align-items: center;
+    margin-right: 30px;
 }
 
-.header-navigation , .login-nav,
-span {
+.header-navigation p, span {
     cursor: pointer;
     margin-left: 10px;
 }
 
-p,a {
-    font-size: 20px;
+/* Responsive */
+@media screen and (max-width: 786px) {
+    .dropdown-menu {
+        visibility: hidden;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 10px;
+        width: 100%;
+        height: 100%;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1500; /* Viši z-index za mobilnu verziju */
+    }
+
+    .dropdown-menu.visible {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .cart {
+        width: 100%;
+        top: 0; /* Dodaj ovde da bi bila uvek u gornjem desnom kutu */
+    }
+
+    .checkout-button {
+        width: 100%;
+    }
 }
 
-    font-size: 20px;
-}
-a { 
+a {
     color: black;
     text-decoration: none;
 }
-@media screen and (max-width: 786px) {
-    .dropdown-menu{
-    visibility: hidden;
-    position: fixed;
-    top: 1px; /* Podesi poziciju menija */
-    left: 0;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    height: 100%;
-    width: 100%;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .dropdown-menu.visible{
-        opacity: 1;
-        visibility: visible;
-    }
+
+a:hover {
+    text-decoration: underline;
 }

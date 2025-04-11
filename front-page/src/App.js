@@ -6,18 +6,27 @@ import { HeaderComponent } from './Component/HeaderComponent';
 import { LoginComponent } from './Component/LoginComponent';
 import { ProductPage } from './Component/ProductPage';
 import { ProductDetails } from './Component/ProductDetails';
+import { CartProvider } from './Component/CartProvider';
+import {CartComponent} from './Component/CartComponent'; 
+import { UserProvider } from './Component/UserProvider';
 function App() {
   return (
-    <Router>
-      <HeaderComponent/>
-      <Routes>
-        <Route path='/' element={<FrontPage/>}></Route>
-        <Route path='/login' element={<LoginComponent/>}></Route>
-        <Route path='/products' element={<ProductPage/>}></Route>
-        <Route path='/product/:id' element={<ProductDetails/>}></Route>
-      </Routes>
-    </Router>
+    <CartProvider>
+      <UserProvider>
+      <Router>
+        <HeaderComponent/>
+        <Routes>
+          <Route path='/' element={<FrontPage />} />
+          <Route path='/login' element={<LoginComponent />} />
+          <Route path='/products' element={<ProductPage />} />
+          <Route path='/cart' element={<CartComponent />} />
+          <Route path='/product/:id' element={<ProductDetails />} />
+        </Routes>
+      </Router>
+      </UserProvider>
+    </CartProvider>
   );
 }
+
 
 export default App;
