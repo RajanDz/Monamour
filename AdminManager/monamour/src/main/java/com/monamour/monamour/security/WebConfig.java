@@ -80,8 +80,8 @@ public class WebConfig {
                         .accessDeniedHandler(accessDeniedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/auth/**").permitAll()  // Omogućeno za signup/login rute
-                                .anyRequest().permitAll()
+                        auth.requestMatchers("/auth/**").permitAll()
+                                .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());

@@ -2,13 +2,16 @@ import { useEffect, useState } from 'react';
 import '../Styles/ProductsPage.css';
 import welcomeImage from '../gallery/glavna.jpg';
 import image from '../gallery/sales.jpg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useUser } from './UserProvider';
 
 export const ProductPage = () => {
     const [showFilters, setShowFilter] = useState(null);
     const [showMenu, setShowMenu] = useState(null);
     const [products, setProducts] = useState([]);
     const [mainProductImage, setMainProductPhoto] = useState([]);
+    const {userLogin} = useUser();
+    const navigate = useNavigate();
     const avaibilitySizes = (element) => {
         if (showMenu === element){
             setShowMenu(null);
@@ -34,11 +37,13 @@ export const ProductPage = () => {
         try {
             const response = await fetch('http://localhost:8080/api/products', {
                 method: 'GET',
+                credentials: 'include'
             });
             if (response.ok) {
                 const data = await response.json();
                 setProducts(data);
-            } else {
+            } 
+            else {
                 console.log('Error while fetching products');
             }
         } catch (error) {
@@ -75,7 +80,7 @@ export const ProductPage = () => {
 
     return (
         <div  className={`products-page ${showFilters ? 'dim-background' : ''}`}>
-            <div className='filters-and-sort-container'>
+            {/* <div className='filters-and-sort-container'>
                 <div className='sort-by'>
                     <div className='product-navigation'>
                     <p onClick={() => vissibilityButton('sort-by')}>SORT BY</p>
@@ -193,7 +198,7 @@ export const ProductPage = () => {
                     </div>
                 )}
                 </div>
-            </div>
+            </div> */}
 
 
 

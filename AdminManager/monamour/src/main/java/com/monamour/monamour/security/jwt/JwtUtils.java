@@ -11,7 +11,9 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -45,15 +47,18 @@ public class JwtUtils {
     @Autowired
     private UserRepo userRepo;
 
-    public String getUsernameFromTokenFromCookie(HttpServletRequest request) {
-        Cookie cookie = WebUtils.getCookie(request,jwtCookieName);
+
+    public User getUserFromJwtToken(HttpServletRequest request) {
+        Cookie cookie = WebUtils.getCookie(request, jwtCookieName);
         if (cookie != null) {
             String username = getUserNameFromJwtToken(cookie.getValue());
             if (username != null) {
-                return username;
+                User user = userRepo.findByUsername(username).orElse(null);
+                System.out.println("user: " + user);
+                return user;
             }
         }
-            return null;
+        return null;
     }
     public String getJwtFromCookie(HttpServletRequest request) {
         Cookie cookie = WebUtils.getCookie(request, jwtCookieName);
@@ -72,7 +77,13 @@ public class JwtUtils {
                 .build();
         return cookie;
     }
+    public ResponseCookie logout() {
+        return ResponseCookie.from(jwtCookieName,"")
+                .path("/")
+                .maxAge(0)
+                .build();
 
+    }
     public String generateTokenFromUsername(String username) {
         Optional<User> findUser = userRepo.findByUsername(username);
         return Jwts.builder()

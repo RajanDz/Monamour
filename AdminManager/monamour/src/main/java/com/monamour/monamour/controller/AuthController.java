@@ -7,13 +7,16 @@ import com.monamour.monamour.dto.SignupRequest;
 import com.monamour.monamour.dto.UserInfoResponse;
 import com.monamour.monamour.entities.Role;
 import com.monamour.monamour.entities.User;
+import com.monamour.monamour.entities.UserLog;
 import com.monamour.monamour.repository.RoleRepo;
+import com.monamour.monamour.repository.UserLogRepo;
 import com.monamour.monamour.repository.UserRepo;
 import com.monamour.monamour.responses.MessageResponse;
 import com.monamour.monamour.security.jwt.JwtUtils;
 import com.monamour.monamour.security.service.UserDetailsImpl;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +32,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.WebUtils;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,6 +48,9 @@ public class AuthController {
 
     @Autowired
     private UserRepo userRepository;
+
+    @Autowired
+    private UserLogRepo userLogRepository;
 
     @Autowired
     private RoleRepo roleRepository;
@@ -81,7 +88,7 @@ public class AuthController {
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString()).body(response);
     }
     @PostMapping("/signup")
-    public ResponseEntity<?> userRegistration(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<?> userRegistration( @RequestBody SignupRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
         }
@@ -116,11 +123,26 @@ public class AuthController {
         user.setRoles(roles);
         userRepository.save(user);
 
+        UserLog userLog = new UserLog();
+        userLog.setUser(user);
+        userLog.setRegistrationDate(LocalDateTime.now());
+        userLog.setLastLoginDate(LocalDateTime.now());
+        userLogRepository.save(userLog);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout() {
+        ResponseCookie cookie = jwtUtils.logout();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+
+                .body("You have been logged out successfully");
+    }
+
     @GetMapping("/getUsernameFromTokenFromCookie")
-    public String testCookieAndUsername(HttpServletRequest request){
-        String usernameFromCookie = jwtUtils.getUsernameFromTokenFromCookie(request);
-        return usernameFromCookie;
-}
+    public ResponseEntity<User> getUserFromToken(HttpServletRequest request){
+        User retriveUser = jwtUtils.getUserFromJwtToken(request);
+        return ResponseEntity.ok(retriveUser);
+    }
 }

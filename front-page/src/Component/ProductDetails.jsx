@@ -20,7 +20,8 @@ export const ProductDetails = () => {
     async function fetchProductDetails() {
         try {
             const response = await fetch(`http://localhost:8080/api/findProduct/${id}`,{
-                method: 'GET'
+                method: 'GET',
+                credentials: 'include'
             })
             if (response.ok){
                 const data = await response.json();
@@ -43,7 +44,8 @@ export const ProductDetails = () => {
     async function fetchProductImages() {
         try {
             const response = await fetch(`http://localhost:8080/api/productsImage/${id}`, {
-                method: 'GET'
+                method: 'GET',
+                credentials: 'include'
             })
             if (response.ok){
                 const data = await response.json();

@@ -24,7 +24,7 @@ export const UserDetails = () => {
 
     async function fetchUserActivity() {
         try {
-            const response = await fetch(`http://localhost:8080/api/userLog/${id}`,{
+            const response = await fetch(`http://localhost:8080/api/userLog/${81}`,{
                 method: 'GET',
                 headers: {
                     'Content-type': 'application/json'

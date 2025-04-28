@@ -15,6 +15,5 @@ public class UserDetailsEdit {
     private String lastname;
     private String email;
     private String password;
-    private String phoneNumber;
 
 }

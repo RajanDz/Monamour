@@ -15,10 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -45,7 +42,7 @@ public class UserService {
         return userLogRepo.findByUserId(userId).orElseThrow();
     }
     private String defaultPath = "C:/Users/Rajan/Desktop/Galerije";
-
+    private String profileImagePath = "C:/Users/Rajan/Desktop";
     public String getProfileImage(Integer userId) {
         Optional<User> findUser = userRepo.findById(userId);
         if (findUser.isPresent()) {
@@ -106,13 +103,37 @@ public class UserService {
                 }  if (userDetailsEdit.getLastname() != null && !userDetailsEdit.getLastname().isBlank()) {
                         findUser.get().setLastname(userDetailsEdit.getLastname());
                 }  if (userDetailsEdit.getEmail() != null && !userDetailsEdit.getEmail().isBlank()) {
-                    findUser.get().setEmail(userDetailsEdit.getEmail());
-                }   if (userDetailsEdit.getPhoneNumber() != null && !userDetailsEdit.getPhoneNumber().isBlank()) {
-                    findUser.get().setPhoneNumber(userDetailsEdit.getPhoneNumber());
+
+                    if (findUser.get().getEmail() != userDetailsEdit.getEmail()) {
+                            Optional<User> doesEmailExist = userRepo.findByEmail(userDetailsEdit.getEmail());
+                        if (doesEmailExist.isPresent()) {
+                        throw new RuntimeException("Email already exists!");
+                    } else {
+                        findUser.ifPresent(user -> user.setEmail(userDetailsEdit.getEmail()));
+                        }
+                    }
+                }   if (userDetailsEdit.getPassword() != null && !userDetailsEdit.getPassword().isBlank()) {
+                    findUser.get().setPassword(userDetailsEdit.getPassword());
                 }
             }
             userRepo.save(findUser.get());
             return findUser.get();
+    }
+    public User changeProfileImage(Integer userId, MultipartFile file) throws IOException {
+        Optional<User> findUser = userRepo.findById(userId);
+        if (findUser.isPresent()) {
+            if (profileImagePath != null && !profileImagePath.isBlank()) {
+                if (file.getOriginalFilename() != null && !file.getOriginalFilename().isBlank()) {
+                    String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+                    Path filePath = Paths.get(profileImagePath,fileName);
+                    Files.copy(file.getInputStream(), filePath);
+
+                    findUser.get().setProfileImage("/" + fileName);
+                    userRepo.save(findUser.get());
+                }
+            }
+        }
+    return findUser.get();
     }
     public List<User> findUserByFilter(Integer userId, String input){
         List<User> users = new ArrayList<>();

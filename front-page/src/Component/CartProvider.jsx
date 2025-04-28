@@ -33,7 +33,14 @@ export const CartProvider = ({ children }) => {
             return updatedCart
         })
     };
-
+    const deleteFromCart = (product) => {
+        setCart((prevCart) => {
+            const findProduct = prevCart.findIndex(p => p.id === product.id);
+            const updatedCart = [...prevCart];
+            updatedCart.splice(findProduct,1);
+            return updatedCart
+        })
+    }
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cart))
         const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -42,7 +49,7 @@ export const CartProvider = ({ children }) => {
     }, [cart]);
 
     return (
-        <CartContext.Provider value={{ cart, price,quantity,setQuantity, addToCart }}>
+        <CartContext.Provider value={{ cart, price,quantity,setQuantity, addToCart,deleteFromCart }}>
             {children}
         </CartContext.Provider>
     );

@@ -2,7 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import '../Styles/Login.css';
 import image from '../gallery/slika2.jpg';
 import { useUser } from './UserProvider';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { da } from 'date-fns/locale';
 
 
 
@@ -10,7 +11,8 @@ export const LoginComponent = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
-    const  {userLogin} = useUser();
+    const [user, setUser] = useState(null);
+    const  {userLogin,getUserFromCookie} = useUser();
 
 async function handleLogin(username, password) {
     try {
@@ -25,13 +27,12 @@ async function handleLogin(username, password) {
 
         if (response.ok) {
             const data = await response.json();
-            console.log("Login successful:", data);
-            userLogin({
-                id: data.id,
-                username: data.username,
-                roles: data.roles
-            })
-            navigate('/');
+            const userData = await getUserFromCookie();
+            if (userData){
+                userLogin(userData)
+                console.log("Login successful:", data);
+                navigate('/');
+            }
         } else {
             console.error("Login failed:");
         }
@@ -39,6 +40,7 @@ async function handleLogin(username, password) {
         console.error("Network or server error:", error);
     }
 }
+
     return (
         <div className='login-wrapper'>
             <div className='login-box'>

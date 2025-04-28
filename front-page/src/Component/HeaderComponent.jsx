@@ -10,9 +10,11 @@ export const HeaderComponent = () => {
     const [mainProductPhoto,setMainProductPhoto] = useState([]);
     const [mainImage ,setMainImage] = useState(null);
     const [size ,setSize] = useState("L");
-    const {cart,quantity, price} = useCart();
-    const {user} = useUser();
+    const [userMenu, setUserMenu] = useState(false);
+    const {cart,quantity, price, deleteFromCart} = useCart();
+    const {user, userLogin,getUserFromCookie} = useUser();
     const [userImage, setUserImage] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(false);
     const navigate = useNavigate();
     const getProductImage = (productId) => {
         const image = mainProductPhoto.find(image => image.productId === productId);
@@ -20,7 +22,7 @@ export const HeaderComponent = () => {
     }; 
     async function getProfileImage() {
         try {
-            const response = await fetch(`http://localhost:8080/api/user/profile-image/${81}`, {
+            const response = await fetch(`http://localhost:8080/api/user/profile-image/${user.id}`, {
                 method: 'GET',
                 credentials: 'include',
             })
@@ -63,7 +65,7 @@ export const HeaderComponent = () => {
             quantity: product.quantity
         }))
         const orderData = {
-            userId: 29,
+            userId: user?.id || 0,
             products: formattedProducts,
             createdAt: new Date().toISOString(),
             shippingAddress: "Testna adresa",
@@ -76,24 +78,55 @@ export const HeaderComponent = () => {
                 headers: {
                     "Content-type": "application/json"
                 },
+                credentials: 'include',
                 body: JSON.stringify(orderData)
             })
 
             if (response.ok){
-                const data = await response.json();
+                const data = await response.text();
                 console.log(JSON.stringify(data))
-            } else {
+                 setErrorMessage(true);
+            } 
+            else if (response.status === 401){
+                userLogin(null);
+                setErrorMessage(true);
+            } 
+            else {
                 console.log("Error happen!")
             }
         } catch (error) {
             console.log("Error happen while creating checkout!:" , error);
         }
     }
+    const handleDeleteFromCart  = (product) => {
+        deleteFromCart(product);
+    }
+    async function logout() {
+        try {
+            const response = await fetch('http://localhost:8080/auth/logout', {
+                method: 'GET',
+                credentials: 'include'
+            })
+            if (response.ok){
+                const data = await response.text();
+                userLogin(null);
+                console.log(data);
+                navigate('/');
+            } else {
+                console.log('Error happen while trying to logout user!')
+            }
+        } catch (error) {
+            console.log('Error happen ', error);
+        }
+    }
     useEffect(() => {
             getProductImages();
             getProfileImage();
+            getUserFromCookie();
         }, []);
-
+useEffect(() => {
+    getProfileImage();
+}, [user])
     return (
         <header className='header'>
             <div className='logo-place'>
@@ -149,6 +182,9 @@ export const HeaderComponent = () => {
                                         <p>Price: {product.price}</p>
                                         <p>Size: {size}</p>
                                         <p>Quantity: {product.quantity}</p>
+                                        <button
+                                        onClick={() => handleDeleteFromCart(product)}
+                                        >Delete from cart</button>
                                         {/* <input 
                                         className='input-quantity'
                                         type="number"
@@ -165,6 +201,9 @@ export const HeaderComponent = () => {
                         <button 
                         onClick={createOrder}
                         className='checkout-button'>Checkout</button>
+                        {errorMessage && (
+                            <p>You need to be logged in to make an order!</p>
+                        )}
                         </div>
                         
                     </div>
@@ -178,7 +217,22 @@ export const HeaderComponent = () => {
                     </div>
                     ): (
                         <div className='login-option'>
-                            {/* <img src={userImage} alt="img" /> */}
+                            <img
+                            onClick={() => setUserMenu(!userMenu)}
+                            src={userImage} alt="img" />
+                            <div className={`user-option ${userMenu ? 'visible' : ''}`}>
+                                <ul className='list-of-options'>
+                                    <li className='option'>
+                                        <Link to={'/profileSettings'}>
+                                        <p>Profile</p>
+                                        </Link>
+                                        <p>Notification</p>
+                                        <p
+                                        onClick={() => logout()}
+                                        >Logout</p>
+                                    </li>
+                                </ul>
+                            </div>
                     </div>
                     )}
                     

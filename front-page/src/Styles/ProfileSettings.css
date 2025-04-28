@@ -1,0 +1,69 @@
+.edit-profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+    overflow: auto;
+    box-sizing: border-box;
+    background-color: #273F4F;
+}
+.upload-photo , .user-information{
+    margin-left: 100px;
+}
+.upload-photo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgb(221, 221, 221);
+    border: 1px solid orange;
+    padding: 5px;
+    border-radius: 2px;
+}
+.upload-photo img {
+    height: auto;
+    width: 90px;
+}
+.upload-new-photo{
+    background-color: rgb(240, 116, 0);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+.user-information {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    flex-direction: column;
+    gap: 15px;
+
+
+    background-color: #182935;
+    border-radius: 2px;
+}
+.input-group {
+    display: flex;
+    align-items: flex-start;
+    padding: 5px;
+    color: rgb(255, 255, 255);
+}
+.input-group input{
+    border: none;
+    padding: 10px;
+    border-radius: 2px;
+}
+
+.confirm-button {
+    background-color: rgb(240, 116, 0);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 5px;
+    width: 150px;
+}

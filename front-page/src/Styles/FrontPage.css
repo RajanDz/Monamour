@@ -129,15 +129,6 @@ footer p {
     background-color: rgb(139, 139, 139);
 }
 
-
-.options {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 45%;    
-}
-
 .dropdown-menu p:hover{
    color: rgb(220, 167, 102);
 }

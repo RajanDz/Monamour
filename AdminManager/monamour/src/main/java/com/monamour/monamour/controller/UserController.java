@@ -103,6 +103,11 @@ public class UserController {
             User userDetailsEdit1 = userService.editUserDetails(userDetailsEdit);
             return ResponseEntity.ok(userDetailsEdit1);
     }
+    @PostMapping("/uploadProfileImage")
+    public ResponseEntity<User> uploadProfileImage(@RequestParam(name = "id") Integer userId, @RequestParam(name = "image") MultipartFile file) throws IOException {
+        User uploadImage = userService.changeProfileImage(userId,file);
+        return ResponseEntity.ok(uploadImage);
+    }
     @GetMapping("/userLog/{id}")
     public ResponseEntity<UserLog> userActivity(@PathVariable Integer id) {
         UserLog userLog = userService.userLog(id);
