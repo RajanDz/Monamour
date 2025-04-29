@@ -4,6 +4,7 @@ package com.monamour.monamour.service;
 import com.monamour.monamour.dto.*;
 import com.monamour.monamour.entities.*;
 import com.monamour.monamour.repository.*;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,13 +26,17 @@ public class UserService {
     private final OrderRepo orderRepo;
     private final OrderedProductsRepo orderedProductsRepo;
     private final ProductRepo productRepo;
-    public UserService(UserRepo userRepo, UserLogRepo userLogRepo, OrderRepo orderRepo, OrderedProductsRepo orderedProductsRepo, ProductRepo productRepo) {
+    private final NotificationRepo notificationRepo;
+    public UserService(UserRepo userRepo, UserLogRepo userLogRepo, OrderRepo orderRepo, OrderedProductsRepo orderedProductsRepo, ProductRepo productRepo, NotificationRepo notificationRepo) {
         this.userRepo = userRepo;
         this.userLogRepo = userLogRepo;
         this.orderRepo = orderRepo;
         this.orderedProductsRepo = orderedProductsRepo;
         this.productRepo = productRepo;
+        this.notificationRepo = notificationRepo;
     }
+    private String defaultPath = "C:/Users/Rajan/Desktop/Galerije";
+    private String profileImagePath = "C:/Users/Rajan/Desktop";
     public List<User> getAllUsers() {
         return userRepo.findAll();
     }
@@ -41,8 +46,9 @@ public class UserService {
     public UserLog userLog (Integer userId){
         return userLogRepo.findByUserId(userId).orElseThrow();
     }
-    private String defaultPath = "C:/Users/Rajan/Desktop/Galerije";
-    private String profileImagePath = "C:/Users/Rajan/Desktop";
+    public List<Notification> getNotifications(Integer userId){
+            return notificationRepo.findByUserId(userId);
+    }
     public String getProfileImage(Integer userId) {
         Optional<User> findUser = userRepo.findById(userId);
         if (findUser.isPresent()) {
@@ -59,28 +65,7 @@ public class UserService {
         }
         return null;
     }
-    public String registration (Registration registration) throws IOException {
-        User user = new User();
-        user.setName(registration.getName());
-        user.setLastname(registration.getLastname());
-        user.setPhoneNumber(registration.getPhoneNumber());
-        user.setPassword(registration.getPassword());
-        user.setEmail(registration.getEmail());
-        user.setGender(registration.getGender());
 
-        if (registration.getGender().equalsIgnoreCase("male")){
-            user.setProfileImage("/muska.png");
-        } else if (registration.getGender().equalsIgnoreCase("female")){
-            user.setProfileImage("/zenska.png");
-
-        }
-        UserLog userLog = new UserLog();
-        userLog.setUser(user);
-        userLog.setRegistrationDate(LocalDateTime.now());
-        userRepo.save(user);
-        userLogRepo.save(userLog);
-        return "Successfully registered";
-    }
     public LoginResponse login(LoginCredentials loginCredentials) {
         Optional<User> user = userRepo.findByEmail(loginCredentials.getEmail());
         Optional<UserLog> userLog = userLogRepo.findByUserId(user.get().getId());
@@ -122,14 +107,20 @@ public class UserService {
     public User changeProfileImage(Integer userId, MultipartFile file) throws IOException {
         Optional<User> findUser = userRepo.findById(userId);
         if (findUser.isPresent()) {
-            if (profileImagePath != null && !profileImagePath.isBlank()) {
+            if (defaultPath != null && !defaultPath.isBlank()) {
                 if (file.getOriginalFilename() != null && !file.getOriginalFilename().isBlank()) {
                     String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-                    Path filePath = Paths.get(profileImagePath,fileName);
+                    Path filePath = Paths.get(defaultPath,fileName);
                     Files.copy(file.getInputStream(), filePath);
 
                     findUser.get().setProfileImage("/" + fileName);
                     userRepo.save(findUser.get());
+
+                    Notification notification = new Notification();
+                    notification.setUser(findUser.get());
+                    notification.setMessage(NotificationMessage.PROFILE_PICTURE.getMessage());
+                    notification.setDateOfNotication(LocalDateTime.now());
+                    notificationRepo.save(notification);
                 }
             }
         }

@@ -200,6 +200,7 @@ public class ProductService {
         }
         return null;
     }
+
     public ProductImage uploadPhoto (Integer productId,MultipartFile [] image) throws IOException {
         Optional<Product> findProduct = productRepo.findById(productId);
         if (findProduct.isPresent()) {

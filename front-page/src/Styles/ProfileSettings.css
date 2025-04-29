@@ -8,6 +8,32 @@
     box-sizing: border-box;
     background-color: #273F4F;
 }
+.topbar-menu {
+    position: fixed;
+    top: 100px;
+    height: auto;
+    width: auto;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+
+    gap: 10px;
+    padding: 5px;
+    background-color: white;
+    border-radius: 10px;
+}
+.topbar-menu a {
+    text-decoration: none;
+}
+.topbar-menu p {
+    cursor: pointer;
+    color: black;
+}
+.topbar-menu p:hover{
+    box-shadow: 1px 1px 6px rgb(5, 5, 5); /* X offset, Y offset, blur, color */
+}
 .upload-photo , .user-information{
     margin-left: 100px;
 }
@@ -66,4 +92,8 @@
     cursor: pointer;
     margin-top: 5px;
     width: 150px;
+}
+.error-message{
+    font-size: large;
+    color: red;
 }

@@ -42,29 +42,7 @@ public class UserController {
             file.transferTo(new File("D:\\Upload\\" + fName));
             return ResponseEntity.ok("Uploaded");
     }
-    @PostMapping("/register")
-    public ResponseEntity<String> registerUser(
-            @RequestParam String name,
-            @RequestParam String lastname,
-            @RequestParam String email,
-            @RequestParam String phoneNumber,
-            @RequestParam String password,
-            @RequestParam String gender) {
 
-        Registration registration = new Registration();
-        registration.setName(name);
-        registration.setLastname(lastname);
-        registration.setEmail(email);
-        registration.setPhoneNumber(phoneNumber);
-        registration.setPassword(password);
-        registration.setGender(gender);
-        try {
-            String result = userService.registration(registration);
-            return ResponseEntity.ok(result);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while saving user.");
-        }
-    }
     @GetMapping("/info")
     public ResponseEntity<String> getRequestInfo(HttpServletRequest request, @RequestParam(name = "name") String name) {
         String method = request.getMethod();
@@ -138,4 +116,10 @@ public class UserController {
         List<OrderedProducts> products = userService.getProduct(orderId);
         return ResponseEntity.ok(products);
     }
+    @GetMapping("/getUserNotifications/{id}")
+    public ResponseEntity<List<Notification>> getUserNotifications(@PathVariable Integer id) {
+        List<Notification> getNotifications = userService.getNotifications(id);
+        return ResponseEntity.ok(getNotifications);
+    }
+
 }

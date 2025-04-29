@@ -1,15 +1,17 @@
 import '../Styles/ProfileSettings.css'
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { useUser } from "./UserProvider";
 import { da } from 'date-fns/locale';
 import { error } from 'ajv/dist/vocabularies/applicator/dependencies';
+import { upload } from '@testing-library/user-event/dist/upload';
 
 export const ProfileSettings = () => {
     const {user} = useUser()
     const [userImage, setUserImage] = useState(null);
     const [registrationDate, setRegistrationDate] = useState(null);
     const [errorMessage, setErrorMessage] = useState(null);
+    const [errorMessageForUpload, setErrorMessageForUpload] = useState(null);
     const [newProfileImage, setNewProfileImage] = useState(null);
 
     const [name, setName] = useState(null);
@@ -92,7 +94,42 @@ export const ProfileSettings = () => {
             console.log('Error happen while trying to fetch response! ', error)
         }
     }
+    const handleFileChange = (e) => {
+        const MIN_FILE_SIZE =  10 * 1024;
+        const MAX_FILE_SIZE = 300 * 1024;
 
+        if (!e) return;
+        const file = e.target.files[0];
+        if (file.size < MIN_FILE_SIZE){
+            setErrorMessageForUpload('Size of image is too small')
+        } else if (file.size > MAX_FILE_SIZE){
+            setErrorMessageForUpload('Size of image is too large')
+        } else {
+            setNewProfileImage(e.target.files[0])
+            console.log("Image is uploaded!")
+        }
+    }
+    async function uploadProfileImage() {
+        const formData = new FormData();
+        formData.append("id", user.id);
+        formData.append("image", newProfileImage);
+        try {
+            const response  = await fetch(`http://localhost:8080/api/uploadProfileImage`, {
+                method: 'POST',
+                credentials: 'include',
+                body: formData
+            })
+            if (response.ok){
+                const data = await response.json();
+                console.log("Image is uploaded: ", data)
+            } else {
+                console.log("Error while uploading image!")
+            }
+        } catch (error) {
+            console.log("Error happen: ", error);
+        }
+        
+    }
 useEffect(() => {
     if (user){
         getProfileImage();
@@ -106,7 +143,18 @@ useEffect(() => {
         <div>
             {user !== null ? (
             <div className="edit-profile">
+            <div className='topbar-menu'>
+                <Link to={'/notification'}>
+                <p>Notification</p>
+                </Link>
+                <Link to={'/notification'}>
+                <p>Order</p>
+                </Link>
+                <Link to={'/notification'}>
+                <p>Payment</p>
+                </Link>
 
+            </div>
             <div className='upload-photo'>
                 <h1>{user.name} {user.lastname}</h1>
                 <p>@{user.username}</p>
@@ -116,7 +164,7 @@ useEffect(() => {
                 type='file'
                 hidden
                 id='uploadImage'
-                onChange={(e) => {setNewProfileImage(e.target.files[0])}}
+                onChange={(e) => handleFileChange(e)}
                 />
 
                 <button 
@@ -124,7 +172,14 @@ useEffect(() => {
                 onClick={() => document.getElementById('uploadImage').click()}
                 >Upload new photo
                 </button>
-
+                {errorMessageForUpload && (
+                    <p className='error-message'>{errorMessageForUpload}</p>
+                )}
+                {newProfileImage && (
+                    <button
+                    onClick={() => uploadProfileImage()}
+                    >Confirm changes</button>
+                )}
                 <p>Member since: {registrationDate || "We doesn't have information right now."}</p>
             </div>
 

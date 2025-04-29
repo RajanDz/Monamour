@@ -125,6 +125,8 @@ header {
     align-items: flex-start;
     flex-direction: column;
     padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .products ul {

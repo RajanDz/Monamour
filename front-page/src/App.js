@@ -7,9 +7,10 @@ import { LoginComponent } from './Component/LoginComponent';
 import { ProductPage } from './Component/ProductPage';
 import { ProductDetails } from './Component/ProductDetails';
 import { CartProvider } from './Component/CartProvider';
-import {CartComponent} from './Component/CartComponent'; 
+import { CartComponent } from './Component/CartComponent'; 
 import { UserProvider } from './Component/UserProvider';
 import { ProfileSettings } from './Component/ProfileSettings';
+import { NotificationComponent } from './Component/NotificationComponent';
 function App() {
   return (
     <CartProvider>
@@ -23,6 +24,7 @@ function App() {
           <Route path='/cart' element={<CartComponent />} />
           <Route path='/product/:id' element={<ProductDetails />} />
           <Route path='/profileSettings' element={<ProfileSettings/>}></Route>
+          <Route path='/notification' element={<NotificationComponent/>}></Route>
         </Routes>
       </Router>
       </UserProvider>

@@ -1,13 +1,12 @@
 package com.monamour.monamour.controller;
 
 
-import com.monamour.monamour.dto.AppRole;
-import com.monamour.monamour.dto.LoginRequest;
-import com.monamour.monamour.dto.SignupRequest;
-import com.monamour.monamour.dto.UserInfoResponse;
+import com.monamour.monamour.dto.*;
+import com.monamour.monamour.entities.Notification;
 import com.monamour.monamour.entities.Role;
 import com.monamour.monamour.entities.User;
 import com.monamour.monamour.entities.UserLog;
+import com.monamour.monamour.repository.NotificationRepo;
 import com.monamour.monamour.repository.RoleRepo;
 import com.monamour.monamour.repository.UserLogRepo;
 import com.monamour.monamour.repository.UserRepo;
@@ -45,18 +44,20 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserRepo userRepository;
-
-    @Autowired
-    private UserLogRepo userLogRepository;
-
-    @Autowired
-    private RoleRepo roleRepository;
-
+    private final  UserRepo userRepository;
+    private final  UserLogRepo userLogRepository;
+    private final RoleRepo roleRepository;
+    private final NotificationRepo notificationRepository;
     @Autowired
     private PasswordEncoder encoder;
+
+    public AuthController(UserRepo userRepository, UserLogRepo userLogRepository, RoleRepo roleRepository, NotificationRepo notificationRepository) {
+        this.userRepository = userRepository;
+        this.userLogRepository = userLogRepository;
+        this.roleRepository = roleRepository;
+        this.notificationRepository = notificationRepository;
+    }
+
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
@@ -128,6 +129,12 @@ public class AuthController {
         userLog.setRegistrationDate(LocalDateTime.now());
         userLog.setLastLoginDate(LocalDateTime.now());
         userLogRepository.save(userLog);
+        String username = user.getUsername() != null ? user.getUsername(): "Unknown username";
+        Notification notification = new Notification();
+        notification.setUser(user);
+        notification.setMessage(NotificationMessage.REGISTERED.formatMessage(username));
+        notification.setDateOfNotication(LocalDateTime.now());
+        notificationRepository.save(notification);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
     @GetMapping("/logout")
