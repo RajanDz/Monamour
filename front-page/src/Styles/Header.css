@@ -100,6 +100,10 @@ header {
     justify-content: center;
     align-items: center;
 }
+.options a,
+.options a:hover{
+    text-decoration: none;
+}
 /* Cart details */
 .cart-header {
     display: flex;
@@ -186,11 +190,12 @@ header {
 }
 .login-option img {
     position: relative;
-    border-radius: 50%;
+    border-radius: 12px;
     height: auto;
     width: 30px;
 }
 .login-option img:hover{
+    cursor: pointer;
     background-color: rgb(25, 135, 232);
 }
 .login-option img, .login-option span {
@@ -206,6 +211,7 @@ header {
     box-shadow: 1px 1px 6px black;
     border-radius: 20%;
 }
+
 .visible {
     display: flex;
     flex-direction: column;
@@ -216,6 +222,7 @@ header {
     width: 120px;
     padding: 0;
     margin: 5px;
+    list-style-type: none;
 }
 
 .list-of-options li {
@@ -225,18 +232,16 @@ header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
   }
-  .option p {
-    width: 100%;
-    text-align: center;
-    border-radius: 10px;
-    margin-right: 5px;
-  }
+  .option a, 
+.option a:hover {
+    text-decoration: none;
+}
   .option p:hover{
     background-color: rgb(243, 242, 242);
     box-shadow: 1px 1px 6px black;
+    text-decoration: none;
+    list-style-type: none;
   }
 
 .header-navigation p, span {

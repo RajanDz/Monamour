@@ -1,5 +1,17 @@
-.notifications-table{
+.notification-page{
+    display: flex;
+    align-items: flex-start;
     justify-content: center;
+    height: 100vh;
+    background-color: #273F4F;
+}
+table{
+    width: 50%;
+    margin-top: 220px;
+}
+th,td {
     align-items: center;
-    margin-top: 150px
+    background-color: #ffffff;
+    padding: 5px;
+    border-radius: 2px;
 }

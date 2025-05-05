@@ -11,6 +11,7 @@ import { CartComponent } from './Component/CartComponent';
 import { UserProvider } from './Component/UserProvider';
 import { ProfileSettings } from './Component/ProfileSettings';
 import { NotificationComponent } from './Component/NotificationComponent';
+import { OrderComponent } from './Component/OrderComponent';
 function App() {
   return (
     <CartProvider>
@@ -24,7 +25,8 @@ function App() {
           <Route path='/cart' element={<CartComponent />} />
           <Route path='/product/:id' element={<ProductDetails />} />
           <Route path='/profileSettings' element={<ProfileSettings/>}></Route>
-          <Route path='/notification' element={<NotificationComponent/>}></Route>
+          <Route path='/notifications' element={<NotificationComponent/>}></Route>
+          <Route path='/order' element={<OrderComponent/>}></Route>
         </Routes>
       </Router>
       </UserProvider>

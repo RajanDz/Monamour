@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -37,6 +38,8 @@ public class UserService {
     }
     private String defaultPath = "C:/Users/Rajan/Desktop/Galerije";
     private String profileImagePath = "C:/Users/Rajan/Desktop";
+
+
     public List<User> getAllUsers() {
         return userRepo.findAll();
     }
@@ -185,21 +188,26 @@ public class UserService {
             Product findProduct = productRepo.findById(product.getProductId()).get();
             OrderedProducts orderedProducts = new OrderedProducts();
             orderedProducts.setOrder(order);
+            orderedProducts.setUser(user);
             orderedProducts.setProduct(findProduct);
             orderedProducts.setQuantity(product.getQuantity());
-            orderedProducts.setPriceOfProducts(findProduct.getPrice());
             orderedProductsRepo.save(orderedProducts);
         }
         return "Successfully created";
     }
-    public List<Order> getOrders(Integer userId) {
+    public List<OrderDto> getOrders(Integer userId) {
         User user = userRepo.findById(userId).get();
-        List<Order> getOrders = orderRepo.findByUserAndStatus(user,"PENDING");
-        return getOrders;
+        return orderRepo.findByUserAndStatus(user,"PENDING").stream().map(order -> new OrderDto(
+                order.getId(),
+                order.getCreatedAt(),
+                order.getShippingAddress(),
+                order.getTotalPrice(),
+                order.getStatus()))
+                .collect(Collectors.toList());
     }
 
-    public List<OrderedProducts> getProduct(Integer orderId) {
-        return  orderedProductsRepo.findByOrderId(orderId);
+    public List<Product> getProduct(Integer userId) {
+        return  orderedProductsRepo.findByUserId(userId).stream().map(orderedProducts -> orderedProducts.getProduct()).collect(Collectors.toList());
     }
 
 }

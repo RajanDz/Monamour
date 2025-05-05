@@ -4,6 +4,7 @@ import welcomeImage from '../gallery/glavna.jpg';
 import image from '../gallery/sales.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from './UserProvider';
+import { useCart } from './CartProvider';
 
 export const ProductPage = () => {
     const [showFilters, setShowFilter] = useState(null);
@@ -11,6 +12,7 @@ export const ProductPage = () => {
     const [products, setProducts] = useState([]);
     const [mainProductImage, setMainProductPhoto] = useState([]);
     const {userLogin} = useUser();
+    const {addToCart} = useCart();
     const navigate = useNavigate();
     const avaibilitySizes = (element) => {
         if (showMenu === element){
@@ -205,13 +207,17 @@ export const ProductPage = () => {
             <div className='product-and-filter-container'>
                     {products.map((product) => (
                         <div className='product' key={product.id}>
-                            <Link to={`/product/${product.id}`}>
                             <div className='image-box'>
+                            <Link to={`/product/${product.id}`}>
                             <img src={getProductImage(product.id)} alt="product" />
-                            <span className="material-symbols-outlined">
+                            </Link>
+                            <span 
+                            onClick={() => addToCart(product,1)}
+                            className="material-symbols-outlined">
                             add
                             </span>
                             </div>
+                            <Link to={`/product/${product.id}`}>
                                 <p className='product-name'>{product.name}</p>
                                 <p>{product.price}€</p>
                             </Link>

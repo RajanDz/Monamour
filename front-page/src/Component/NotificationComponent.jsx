@@ -1,12 +1,15 @@
 import '../Styles/Notification.css'
 import { useEffect, useState } from "react";
 import { useUser } from "./UserProvider"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { not } from "ajv/dist/compile/codegen";
 import { tr } from "date-fns/locale";
+import { use } from 'react';
 
 export const NotificationComponent = () => {
     const {user} = useUser();
     const [notifications, setNotifications] = useState([]);
+    const navigate = useNavigate();
     async function fetchUserNotification() {
         try {
             const response = await fetch(`http://localhost:8080/api/getUserNotifications/${user.id}`, {
@@ -27,7 +30,21 @@ export const NotificationComponent = () => {
         console.log()
     }, [user])
     return (
-        <div className="notification-page">
+        <div className=''>
+            {user !== null ? (
+                <div className="notification-page">
+                    <div className='topbar-menu'>
+                <Link to={'/profileSettings'}>
+                <p>Profile</p>
+                </Link>
+                <Link to={'/notification'}>
+                <p>Order</p>
+                </Link>
+                <Link to={'/notification'}>
+                <p>Payment</p>
+                </Link>
+
+            </div>
             <table className="notifications-table">
                 <thead>
                     <tr>
@@ -52,6 +69,11 @@ export const NotificationComponent = () => {
                     )}
                 </tbody>
             </table>
+                </div>
+            ): (
+                navigate('/login')
+            )}
+            
         </div>
     )
 }

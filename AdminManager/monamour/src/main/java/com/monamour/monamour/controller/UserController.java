@@ -107,13 +107,13 @@ public class UserController {
         return ResponseEntity.ok(checkout);
     }
     @GetMapping("/getOrders/{userId}")
-    public ResponseEntity<List<Order>> getOrders(@PathVariable  Integer userId) {
-        List<Order> order = userService.getOrders(userId);
+    public ResponseEntity<List<OrderDto>> getOrders(@PathVariable  Integer userId) {
+        List<OrderDto> order = userService.getOrders(userId);
         return ResponseEntity.ok(order);
     }
     @GetMapping("/getProductsOfOrder/{orderId}")
-    public ResponseEntity<List<OrderedProducts>> getProductsOfOrder(@PathVariable Integer orderId) {
-        List<OrderedProducts> products = userService.getProduct(orderId);
+    public ResponseEntity<List<Product>> getProductsOfOrder(@PathVariable Integer orderId) {
+        List<Product> products = userService.getProduct(orderId);
         return ResponseEntity.ok(products);
     }
     @GetMapping("/getUserNotifications/{id}")

@@ -15,6 +15,7 @@ export const HeaderComponent = () => {
     const {user, userLogin,getUserFromCookie} = useUser();
     const [userImage, setUserImage] = useState(null);
     const [errorMessage, setErrorMessage] = useState(false);
+    const [succesMessage, setSuccesMessage] = useState(false);
     const navigate = useNavigate();
     const getProductImage = (productId) => {
         const image = mainProductPhoto.find(image => image.productId === productId);
@@ -85,15 +86,13 @@ export const HeaderComponent = () => {
             if (response.ok){
                 const data = await response.text();
                 console.log(JSON.stringify(data))
-                 setErrorMessage(true);
-            } 
-            else if (response.status === 401){
-                userLogin(null);
-                setErrorMessage(true);
+                 setErrorMessage(false);
+                 setSuccesMessage("Your order is created!")
             } 
             else {
                 console.log("Error happen!")
-            }
+                setErrorMessage(true);
+            } 
         } catch (error) {
             console.log("Error happen while creating checkout!:" , error);
         }
@@ -140,11 +139,21 @@ useEffect(() => {
                         >close
                         </span> 
                         <div className='options'>
+                            <Link to={'/'}>
                             <p>Home</p>
+                            </Link>
+                            <Link to={'/products'}>
                             <p>New Collection</p>
+                            </Link>
+                            <Link to={'/products'}>
                             <p>Sale</p>
+                            </Link>
+                            <Link to={'/'}>
                             <p>About</p>
+                            </Link>
+                            <Link to={'/'}>
                             <p>Contact</p>
+                            </Link>
                         </div>         
                 </div>
             </div>
@@ -199,10 +208,12 @@ useEffect(() => {
                         <div className='cart-info'>
                         <p>Total price: {price} </p>
                         <button 
-                        onClick={createOrder}
+                        onClick={() => createOrder()}
                         className='checkout-button'>Checkout</button>
-                        {errorMessage && (
+                        {errorMessage ? (
                             <p>You need to be logged in to make an order!</p>
+                        ): (
+                            <p>{succesMessage}</p>
                         )}
                         </div>
                         
@@ -226,7 +237,10 @@ useEffect(() => {
                                         <Link to={'/profileSettings'}>
                                         <p>Profile</p>
                                         </Link>
+
+                                        <Link to={'/notifications'}>
                                         <p>Notification</p>
+                                        </Link>
                                         <p
                                         onClick={() => logout()}
                                         >Logout</p>

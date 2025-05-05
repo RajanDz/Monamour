@@ -95,7 +95,7 @@ export const ProfileSettings = () => {
         }
     }
     const handleFileChange = (e) => {
-        const MIN_FILE_SIZE =  10 * 1024;
+        const MIN_FILE_SIZE =  1 * 1024;
         const MAX_FILE_SIZE = 300 * 1024;
 
         if (!e) return;
@@ -144,10 +144,10 @@ useEffect(() => {
             {user !== null ? (
             <div className="edit-profile">
             <div className='topbar-menu'>
-                <Link to={'/notification'}>
+                <Link to={'/notifications'}>
                 <p>Notification</p>
                 </Link>
-                <Link to={'/notification'}>
+                <Link to={'/order'}>
                 <p>Order</p>
                 </Link>
                 <Link to={'/notification'}>

@@ -102,6 +102,7 @@ footer p {
     height: 850px;
     padding: 15px;
     border-radius: 17px;
+    text-decoration: none;
 }
 
 .nav-to-product {
@@ -126,6 +127,7 @@ footer p {
 }
 .nav-to-product:hover{
     color: white;
+    text-decoration: none;
     background-color: rgb(139, 139, 139);
 }
 
