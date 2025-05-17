@@ -147,10 +147,10 @@ useEffect(() => {
                 <Link to={'/notifications'}>
                 <p>Notification</p>
                 </Link>
-                <Link to={'/order'}>
+                <Link to={'/orders'}>
                 <p>Order</p>
                 </Link>
-                <Link to={'/notification'}>
+                <Link to={'/payment'}>
                 <p>Payment</p>
                 </Link>
 
@@ -230,7 +230,7 @@ useEffect(() => {
                         <div>
                             <p>Password</p>
                             <input
-                            type="text"
+                            type="password"
                             placeholder="Type your new password"
                             onChange={(e) => setPassword(e.target.value)}
                         />
@@ -239,7 +239,7 @@ useEffect(() => {
                     <div className='input-group'>
                         <p>Confirm Password</p>
                         <input
-                            type="text"
+                            type="password"
                             placeholder="Confirm your password"
                             onChange={(e) => setPassword(e.target.value)}
                         />

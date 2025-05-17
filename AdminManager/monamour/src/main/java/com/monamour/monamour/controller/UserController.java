@@ -7,6 +7,9 @@ import com.monamour.monamour.service.RoleService;
 import com.monamour.monamour.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -107,9 +110,12 @@ public class UserController {
         return ResponseEntity.ok(checkout);
     }
     @GetMapping("/getOrders/{userId}")
-    public ResponseEntity<List<OrderDto>> getOrders(@PathVariable  Integer userId) {
-        List<OrderDto> order = userService.getOrders(userId);
-        return ResponseEntity.ok(order);
+    public ResponseEntity<OrderResponse> getOrders(@PathVariable Integer userId,
+                                                    @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                    @RequestParam(name = "size", defaultValue = "10", required = false) Integer size ){
+        Pageable pageable = PageRequest.of(page,size);
+        OrderResponse orders = userService.getOrders(userId,page,size);
+        return ResponseEntity.ok(orders);
     }
     @GetMapping("/getProductsOfOrder/{orderId}")
     public ResponseEntity<List<Product>> getProductsOfOrder(@PathVariable Integer orderId) {
@@ -117,9 +123,24 @@ public class UserController {
         return ResponseEntity.ok(products);
     }
     @GetMapping("/getUserNotifications/{id}")
-    public ResponseEntity<List<Notification>> getUserNotifications(@PathVariable Integer id) {
-        List<Notification> getNotifications = userService.getNotifications(id);
+    public ResponseEntity<NotificationResponse> getUserNotifications(@PathVariable Integer id, @RequestParam(name = "pageNo") int pageNo, @RequestParam(name = "size", defaultValue = "10",required = false) int pageSize) {
+        NotificationResponse getNotifications = userService.getNotifications(id,pageNo,pageSize);
         return ResponseEntity.ok(getNotifications);
     }
 
+    @PostMapping("/addPayment")
+    public ResponseEntity<PaymentsMethod> addPayment(@RequestBody CreatePayment createPayment) {
+        PaymentsMethod paymentsMethod = userService.addPaymentMethod(createPayment);
+        return ResponseEntity.ok(paymentsMethod);
+    }
+    @GetMapping("/getYourPayments/{userId}")
+    public ResponseEntity<List<PaymentsMethod>> getYourPayments(@PathVariable Integer userId) {
+        List<PaymentsMethod> getPayments = userService.getYourPayments(userId);
+        return ResponseEntity.ok(getPayments);
+    }
+    @GetMapping("/removeCard/{userId}/{cardId}")
+    public ResponseEntity<PaymentsMethod> removeCard(@PathVariable Integer userId, @PathVariable Integer cardId) {
+        PaymentsMethod paymentsMethod = userService.removeCreditCard(userId,cardId);
+        return ResponseEntity.ok(paymentsMethod);
+    }
 }

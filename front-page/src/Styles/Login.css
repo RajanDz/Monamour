@@ -53,7 +53,10 @@
     border-radius: 5px;
     width: auto;
 }
-
+.error-message{
+    color: red;
+    font-size: large;
+}
 .login-button {
     padding: 12px 20px;
     margin-top: 10px;

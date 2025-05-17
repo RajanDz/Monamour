@@ -140,6 +140,7 @@ header {
 }
 
 .show-product {
+    position: relative;
     display: flex;
     width: 100%; 
     padding: 10px;
@@ -156,7 +157,95 @@ header {
 .about-product p {
     font-size: medium;
 }
+.checkout-form{
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    box-shadow: 1px 1px 6px black;
+    position: absolute;
+    top: 2px;
+    right: 300px;
+    height: auto;
+    width: 100%;
+    gap: 20px;
+}
+.checkout-form input{
+    border: none;
+    box-shadow: 1px 1px 6px black;
+    height: 25px;
+    width: 90%;
+}
+.contact-information{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.contact-input{
+    display: flex;
+    flex-direction: column;
+}
 
+.contact-input h1{
+    font-size: 18px;
+}
+.pay-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pay-button button:hover{
+    background-color: #2F2E2E;
+    color: white;
+}
+.close-button{
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+.checkout-header h1{
+    color: white;
+    box-shadow: 1px 1px 5px black;
+    background-color: #2F2E2E;
+}
+.user-card-information {
+    display: flex;
+    align-items: center;
+    border: 1px solid black;
+}
+.user-card-information img {
+    width: 50px;
+}
+.user-card-information:hover{
+    color: white;
+    background-color: #252525;
+}
+.user-card-information.chosen{
+    color: white;
+    background-color: black;
+}
+.no-card-exception{
+    display: flex;
+    flex-direction: column;
+}
+.no-card-exception button{
+    border: none;
+    background-color: white;
+    box-shadow: 1px 1px 6px black;
+}
+.no-card-exception button:hover{
+    background-color: #252525;
+    color: white;
+    cursor: pointer;
+}
+.card-details{
+    align-items: center;
+}
+.pay-button button{
+    border: none;
+    background-color: white;
+    width: 150px;
+    box-shadow: 1px 1px 6px black;
+}
 .cart-info {
     display: flex;
     flex-direction: column;

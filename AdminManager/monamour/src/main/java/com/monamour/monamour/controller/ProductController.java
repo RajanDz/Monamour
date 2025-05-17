@@ -17,7 +17,7 @@ import java.util.Map;
 
 
 @RestController()
-@RequestMapping("/api")
+@RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -37,6 +37,7 @@ public class ProductController {
         List<Product> product = productService.getAllProducts();
         return ResponseEntity.ok(product);
     }
+    @PreAuthorize("hasRole('ROLE_Emplooyer')")
     @PostMapping("/deleteAllProducts")
     public ResponseEntity<Map<String,String>> deleteAllProducts(@RequestBody ProductsDeleteProcces productsDeleteProcces) throws IOException {
         Map<String, String> response = productService.deleteAll(productsDeleteProcces); 
@@ -59,11 +60,13 @@ public class ProductController {
         List<MainImageResponse> mainImage = productService.getMainImage();
         return ResponseEntity.ok(mainImage);
     }
+    @PreAuthorize("hasRole('ROLE_Emplooyer')")
     @DeleteMapping("/deleteImageofProduct/{imageId}")
     public ResponseEntity<ProductImage> deleteImageofProduct(@PathVariable Integer imageId) throws IOException {
         ProductImage deleteImage = productService.deleteImage(imageId);
         return ResponseEntity.ok(deleteImage);
     }
+    @PreAuthorize("hasRole('ROLE_Emplooyer')")
     @PostMapping("/createProduct")
     public ResponseEntity<Product> createProduct (@RequestParam(name = "name") String name,
                                                   @RequestParam("color") String color,
@@ -73,6 +76,8 @@ public class ProductController {
         Product product = productService.createProduct(name,color,size,price,images);
         return ResponseEntity.ok(product);
     }
+
+    @PreAuthorize("hasRole('ROLE_Emplooyer')")
     @PostMapping("/editProductDetails")
     public ResponseEntity<Product> editProductDetails ( @RequestParam(name = "id") Integer id
                                                         ,@RequestParam(name = "name") String name,
@@ -85,17 +90,25 @@ public class ProductController {
         Product product = productService.editProductDetails(id,name,color,size,price,images,replacedImageId);
         return ResponseEntity.ok(product);
     }
+
+
+    @PreAuthorize("hasRole('ROLE_Emplooyer')")
     @PostMapping("/uploadPhoto")
     public ResponseEntity<ProductImage> uploadPhoto (@RequestParam(name = "id") Integer id,
                                                 @RequestParam(name = "images") MultipartFile [] images) throws IOException {
         ProductImage productImage = productService.uploadPhoto(id, images);
         return ResponseEntity.ok(productImage);
     }
+    @PreAuthorize("hasRole('ROLE_Emplooyer')")
     @GetMapping("/productLogs")
     public ResponseEntity<List<ProductsActivityLog>> getAllProductLogs () {
         List<ProductsActivityLog> logs = productService.getAllProductsActivityLog();
         return ResponseEntity.ok(logs);
     }
+
+
+
+    @PreAuthorize("hasRole('ROLE_Emplooyer')")
     @GetMapping("/setImageAsDefault/{imageId}")
     public ResponseEntity<ProductImage> setImageAsDefault (@PathVariable Integer imageId) throws IOException {
         ProductImage productImage = productService.setImageAsDefault(imageId);

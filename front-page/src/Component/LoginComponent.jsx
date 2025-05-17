@@ -11,8 +11,8 @@ export const LoginComponent = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
-    const [user, setUser] = useState(null);
-    const  {userLogin,getUserFromCookie} = useUser();
+    const [errorMessage, setErrorMessage] = useState(false);
+    const {userLogin,getUserFromCookie} = useUser();
 
 async function handleLogin(username, password) {
     try {
@@ -34,6 +34,7 @@ async function handleLogin(username, password) {
                 navigate('/');
             }
         } else {
+            setErrorMessage(true);
             console.error("Login failed:");
         }
     } catch (error) {
@@ -67,7 +68,9 @@ async function handleLogin(username, password) {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-
+                    {errorMessage && (
+                        <p className='error-message'>Bad Credentials!</p>
+                    )}
                     <button
                     onClick={() => handleLogin(username,password)}
                     className='login-button'>Sign in</button>

@@ -24,6 +24,8 @@ public class CreateOrder {
     private List<ProductShippingDetails> products = new ArrayList<>();
     private LocalDateTime createdAt;
     private String shippingAddress;
+    private String phoneNumber;
     private Double totalPrice;
+    private Integer cardId;
 
 }

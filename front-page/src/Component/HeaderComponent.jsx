@@ -2,8 +2,10 @@
 import '../Styles/Header.css'
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from './CartProvider';
-import { da } from 'date-fns/locale';
+import { da, se, tr } from 'date-fns/locale';
 import { useUser } from './UserProvider';
+import MasterCard from '../gallery/masterCard.png'
+import Visa from '../gallery/visa.png'
 export const HeaderComponent = () => {
     const [menuVisible, setMenuVisible] = useState(false);
     const [cartVisible, setCartVisible] = useState(false);
@@ -15,7 +17,14 @@ export const HeaderComponent = () => {
     const {user, userLogin,getUserFromCookie} = useUser();
     const [userImage, setUserImage] = useState(null);
     const [errorMessage, setErrorMessage] = useState(false);
+    const [authErrorMessage, setAuthErrorMessage] = useState(false);
     const [succesMessage, setSuccesMessage] = useState(false);
+    const [checkoutForm, setCheckoutForm] = useState(false);
+    const [shippingAdress, setShippingAdress] = useState('');
+    const [phoneNumber ,setPhoneNumber] = useState('');
+    const [userCards, setUserCards] = useState([]);
+    const [cardId,setCardId] = useState(0);
+    const [selectedCard, setSelectedCard] = useState(0);
     const navigate = useNavigate();
     const getProductImage = (productId) => {
         const image = mainProductPhoto.find(image => image.productId === productId);
@@ -40,7 +49,7 @@ export const HeaderComponent = () => {
     }
     async function getProductImages() {
         try {
-            const response = await fetch('http://localhost:8080/api/productMainImage', {
+            const response = await fetch('http://localhost:8080/api/products/productMainImage', {
                 method: 'GET',
                 headers: {
                     'Content-type': 'application/json',
@@ -61,6 +70,16 @@ export const HeaderComponent = () => {
     }
     async function createOrder() {
         const cartProducts = JSON.parse(localStorage.getItem('cart'))
+        if (user === null){
+            setAuthErrorMessage(true);
+            return;
+        } else if (cartProducts.length === 0){
+            setErrorMessage(true);
+            return;
+        } else if (selectedCard === null || selectedCard === 0){
+            console.log('You need to chose card before payment.')
+            return;
+        }
         const formattedProducts = cartProducts.map(product => ({
             productId: product.id,
             quantity: product.quantity
@@ -69,10 +88,13 @@ export const HeaderComponent = () => {
             userId: user?.id || 0,
             products: formattedProducts,
             createdAt: new Date().toISOString(),
-            shippingAddress: "Testna adresa",
-            totalPrice: price
+            shippingAddress: shippingAdress,
+            phoneNumber: phoneNumber,
+            totalPrice: price,
+            cardId: cardId
         }
-
+        
+        
         try {
             const response = await fetch('http://localhost:8080/api/confirmCheckout',{
                 method: 'POST',
@@ -85,14 +107,11 @@ export const HeaderComponent = () => {
 
             if (response.ok){
                 const data = await response.text();
-                console.log(JSON.stringify(data))
-                 setErrorMessage(false);
-                 setSuccesMessage("Your order is created!")
-            } 
-            else {
-                console.log("Error happen!")
-                setErrorMessage(true);
-            } 
+                console.log(JSON.stringify(data));
+                setSuccesMessage(`Your order is created!`)
+                setAuthErrorMessage(false);
+                setErrorMessage(false)
+            }
         } catch (error) {
             console.log("Error happen while creating checkout!:" , error);
         }
@@ -118,10 +137,31 @@ export const HeaderComponent = () => {
             console.log('Error happen ', error);
         }
     }
+    async function getUserPayments() {
+        try {
+            const response = await fetch(`http://localhost:8080/api/getYourPayments/${user.id}`,{
+                method: 'GET',
+                credentials: 'include'
+            })
+            if (response.ok){
+                const data = await response.json();
+                console.log('Users cards: ', data)
+                setUserCards(data);
+            } else {
+                console.log('Error happen while fetching cards!');
+            }
+        } catch (error) {
+            console.log('Error happen ', error)
+        }
+    }
+    
     useEffect(() => {
+        getUserPayments();
+    }, [checkoutForm])
+    useEffect(() => {
+            getUserFromCookie();
             getProductImages();
             getProfileImage();
-            getUserFromCookie();
         }, []);
 useEffect(() => {
     getProfileImage();
@@ -204,14 +244,91 @@ useEffect(() => {
                                     </li>
                                 ))}
                             </ul>
+                            {checkoutForm && (
+                            <div className='checkout-form'>
+                                <div className='checkout-header'>
+                                    <h1 className='checkout-title'>Confirm checkout</h1>
+                                </div>
+                                <div className='contact-information'>
+                                    <div className='contact-input'>
+                                    <h1>Phone number</h1>
+                                    <input
+                                    type='text'
+                                    value={phoneNumber || ''}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                    placeholder={user.phoneNumber}
+                                    />
+                                    </div>
+                                    <div className='contact-input'>
+                                        <h1>Adress *</h1>       
+                                        <input
+                                        type='text'
+                                        value={shippingAdress || ''}
+                                        onChange={(e) => setShippingAdress(e.target.value)}
+                                        placeholder='Confirm shipping adress'
+                                        />
+                                    </div>
+
+                                    {userCards.length > 0 ? (
+                                        userCards.map((card) => {
+                                                const isCardChosen = Number(card.id) === Number(selectedCard);
+                                                return (
+                                                    <div
+                                                    onClick={() => {
+                                                        setCardId(card.id)
+                                                        setSelectedCard(card.id)}} 
+                                                    key={card.id}
+                                                    className={`user-card-information ${isCardChosen ? 'chosen': ''}`}>
+                                                        <div className={`card-details`}>
+                                                            <p>Card holder name</p>
+                                                            <p>{card.cardHolderName}</p>
+                                                        </div>
+                                                        <div className='card-details'>
+                                                            <p>Last four digits</p>
+                                                            <p>{card.cardNumber.slice(-4)}</p>
+                                                        </div>
+                                                        <div className='card-details'>
+                                                            <p>Type of card</p>
+                                                        {card.typeOfCard === 'MasterCard' ? (
+                                                            <img src={MasterCard} alt="" />
+                                                        ): (
+                                                            <img src={Visa} alt="" />
+                                                        )}
+                                                        </div>
+                                                        
+                                                    </div>
+                                                )
+                                        })
+                                    ): (
+                                        <div className='no-card-exception'>
+                                        <p>You need to add a card to procide through payment!</p>
+                                        <button
+                                        onClick={() => navigate('/payment')}
+                                        >Add card</button>
+                                        </div>
+                                    )}
+                                </div>
+
+                                
+                                <div className='pay-button'>
+                                        <button
+                                        onClick={() => setCheckoutForm(false)}
+                                        >Close</button>
+                                        <button
+                                        onClick={createOrder}
+                                        >Pay</button>
+                                </div>
+                            </div>
+                            )}
                         </div>
                         <div className='cart-info'>
                         <p>Total price: {price} </p>
                         <button 
-                        onClick={() => createOrder()}
+                        // onClick={() => createOrder()}
+                        onClick={() => setCheckoutForm(true)}
                         className='checkout-button'>Checkout</button>
-                        {errorMessage ? (
-                            <p>You need to be logged in to make an order!</p>
+                        {authErrorMessage || errorMessage ? (
+                            <p>{authErrorMessage ? 'You need to be logged in!': "There are no products in your basket!"}</p>
                         ): (
                             <p>{succesMessage}</p>
                         )}

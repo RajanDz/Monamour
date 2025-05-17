@@ -3,21 +3,29 @@ import { useEffect, useState } from "react";
 import { useUser } from "./UserProvider"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { not } from "ajv/dist/compile/codegen";
-import { tr } from "date-fns/locale";
+import { da, tr } from "date-fns/locale";
 import { use } from 'react';
 
 export const NotificationComponent = () => {
     const {user} = useUser();
     const [notifications, setNotifications] = useState([]);
+    const [page, setPage]  = useState(0);
+    const [pageResponse, setPageResponse] = useState({pageNo: 0, totalPages: 0, isLast:false})
     const navigate = useNavigate();
-    async function fetchUserNotification() {
+    async function fetchUserNotification(page = 0) {
         try {
-            const response = await fetch(`http://localhost:8080/api/getUserNotifications/${user.id}`, {
+            const response = await fetch(`http://localhost:8080/api/getUserNotifications/${user.id}?pageNo=${page}`, {
                 method: 'GET',
                 credentials: 'include'
             })
             if (response.ok){
-                setNotifications(await response.json());
+                const data = await response.json();
+                setNotifications(data.content);
+                setPageResponse({
+                    pageNo: data.pageNo,
+                    totalPages: data.totalPages,
+                    isLast: data.last
+                })
             } else {
                 console.log('Error happen while fetching notification!')
             }
@@ -25,26 +33,43 @@ export const NotificationComponent = () => {
             console.log('Error happen: ', error)
         }
     }
+    const nextPage = () => {
+        if (!pageResponse.isLast){
+            setPage(prevPage => prevPage + 1);
+        } else {
+            setPage(0);
+        }
+    }
+    const prevPage = () => {
+        if (page === 0){
+            setPage(pageResponse.totalPages - 1);
+        } else {
+            setPage(prevPage => prevPage - 1);
+        }
+    }
+    
     useEffect(() => {
-        fetchUserNotification();
-        console.log()
-    }, [user])
+        if (user){
+            fetchUserNotification(page);
+        }
+    }, [page, user])
     return (
-        <div className=''>
+        <div >
             {user !== null ? (
-                <div className="notification-page">
+            <div className="notification-page">
                     <div className='topbar-menu'>
                 <Link to={'/profileSettings'}>
                 <p>Profile</p>
                 </Link>
-                <Link to={'/notification'}>
+                <Link to={'/orders'}>
                 <p>Order</p>
                 </Link>
-                <Link to={'/notification'}>
+                <Link to={'/payment'}>
                 <p>Payment</p>
                 </Link>
 
             </div>
+            <div className='table-container'>
             <table className="notifications-table">
                 <thead>
                     <tr>
@@ -69,7 +94,23 @@ export const NotificationComponent = () => {
                     )}
                 </tbody>
             </table>
-                </div>
+                
+            
+            <div className='pages'>
+                <span 
+                    onClick={prevPage}
+                    className="material-symbols-outlined">
+                    arrow_back_ios
+                    </span>
+                    <p>{page}</p>
+                    <span
+                onClick={nextPage}
+                className="material-symbols-outlined">
+                arrow_forward_ios
+                </span>
+            </div>
+            </div>
+        </div>
             ): (
                 navigate('/login')
             )}

@@ -23,6 +23,13 @@ public class Order {
     @JoinColumn(name = "id_of_user")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "payment_id")
+    private PaymentsMethod paymentsMethod;
+
+    @Column(name = "contact_number")
+    private String contactNumber;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

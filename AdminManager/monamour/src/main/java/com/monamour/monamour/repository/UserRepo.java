@@ -1,6 +1,7 @@
 package com.monamour.monamour.repository;
 
 import com.monamour.monamour.entities.User;
+import org.hibernate.query.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -81,7 +81,8 @@ public class WebConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/auth/**").permitAll()
-                                .anyRequest().permitAll()
+                                .requestMatchers("/api/products/**").permitAll()
+                                .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());

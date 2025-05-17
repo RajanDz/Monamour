@@ -5,7 +5,8 @@ public enum NotificationMessage {
     REGISTERED("Welcome, {username}. Monamour staff is happy to have you there!"),
     EDIT_DETAILS("You succesfully edited the details of you profile! You changed your {details}!"),
     PROFILE_PICTURE("Successfully changed your profile picture!"),
-    ORDER("Your order is created and you can see your order in profile settings.");
+    ORDER("Your order is created and you can see your order in profile settings."),
+    ADDED_CARD("Your card has been added to your profile!"),;
 
     private String message;
     NotificationMessage(String message) {

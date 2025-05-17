@@ -1,0 +1,104 @@
+.payment-page{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    min-width: 100%;
+    overflow: auto;
+    box-sizing: border-box;
+}
+.payment-page .topbar-menu{
+    box-shadow: 1px 1px 6px black;
+}
+.payment-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: rgb(251, 255, 255);
+    box-shadow: 1px 1px 6px rgb(185, 185, 185);
+    height: 700px;
+    width: 800px;
+    margin-top: 20px;
+}
+.save-button {
+    border: none;
+    padding: 30px;
+    width: 170px;
+    background-color: white;
+    box-shadow: 1px 1px 6px rgb(185, 185, 185);
+    cursor: pointer;
+}
+.save-button:hover{
+    color: white;
+    background-color: rgb(61, 61, 61);
+}
+.card-information {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 450px;
+    gap: 5px;
+}
+.card-information input {
+    border: none;
+    padding: 30px;
+    width: 250px;
+    box-shadow: 1px 1px 6px rgb(185, 185, 185);
+}
+.available-credit-card{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-left: 50px;
+    margin-right: 50px;
+    gap: 85px;
+}
+.card-number{
+    display: flex;
+    align-items: center;
+}
+.card-number img{
+    height: auto;
+    width: 80px;
+}
+.credit-card{
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    width: 250px;
+    background-color: rgb(8, 8, 160);
+    border-radius: 2px;
+}
+.delete-button{
+    border: none;
+    color: white;
+    background-color: rgb(235, 9, 9);
+    padding: 10px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.delete-button:hover{
+    background-color: rgb(192, 5, 5);
+}
+.details-of-card{
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    align-items: flex-start;
+    justify-content: center;
+}
+.details-of-card p {
+    color: white;
+}
+.ex-date-type-img {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+.ex-date-type-img img {
+    height: 40px;
+    width: 40px;
+}

@@ -12,6 +12,7 @@ import { UserProvider } from './Component/UserProvider';
 import { ProfileSettings } from './Component/ProfileSettings';
 import { NotificationComponent } from './Component/NotificationComponent';
 import { OrderComponent } from './Component/OrderComponent';
+import { PaymentComponent } from './Component/PaymentComponent';
 function App() {
   return (
     <CartProvider>
@@ -26,7 +27,8 @@ function App() {
           <Route path='/product/:id' element={<ProductDetails />} />
           <Route path='/profileSettings' element={<ProfileSettings/>}></Route>
           <Route path='/notifications' element={<NotificationComponent/>}></Route>
-          <Route path='/order' element={<OrderComponent/>}></Route>
+          <Route path='/orders' element={<OrderComponent/>}></Route>
+          <Route path='/payment' element={<PaymentComponent/>}></Route>
         </Routes>
       </Router>
       </UserProvider>

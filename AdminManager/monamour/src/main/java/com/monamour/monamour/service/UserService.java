@@ -4,8 +4,14 @@ package com.monamour.monamour.service;
 import com.monamour.monamour.dto.*;
 import com.monamour.monamour.entities.*;
 import com.monamour.monamour.repository.*;
+import jakarta.transaction.Transactional;
 import org.aspectj.weaver.ast.Not;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,16 +34,20 @@ public class UserService {
     private final OrderedProductsRepo orderedProductsRepo;
     private final ProductRepo productRepo;
     private final NotificationRepo notificationRepo;
-    public UserService(UserRepo userRepo, UserLogRepo userLogRepo, OrderRepo orderRepo, OrderedProductsRepo orderedProductsRepo, ProductRepo productRepo, NotificationRepo notificationRepo) {
+    private final PaymentsMethodRepo paymentsMethodRepo;
+    private final PasswordEncoder passwordEncoder;
+    public UserService(UserRepo userRepo, UserLogRepo userLogRepo, OrderRepo orderRepo, OrderedProductsRepo orderedProductsRepo, ProductRepo productRepo, NotificationRepo notificationRepo, PaymentsMethodRepo paymentsMethodRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.userLogRepo = userLogRepo;
         this.orderRepo = orderRepo;
         this.orderedProductsRepo = orderedProductsRepo;
         this.productRepo = productRepo;
         this.notificationRepo = notificationRepo;
+        this.paymentsMethodRepo = paymentsMethodRepo;
+        this.passwordEncoder = passwordEncoder;
     }
-    private String defaultPath = "C:/Users/Rajan/Desktop/Galerije";
-    private String profileImagePath = "C:/Users/Rajan/Desktop";
+    private final String defaultPath = "C:/Users/Rajan/Desktop/Galerije";
+    private final String profileImagePath = "C:/Users/Rajan/Desktop";
 
 
     public List<User> getAllUsers() {
@@ -49,8 +59,21 @@ public class UserService {
     public UserLog userLog (Integer userId){
         return userLogRepo.findByUserId(userId).orElseThrow();
     }
-    public List<Notification> getNotifications(Integer userId){
-            return notificationRepo.findByUserId(userId);
+    public NotificationResponse getNotifications(int userId, int pageNo, int pageSize){
+            Pageable pageable = PageRequest.of(pageNo,pageSize, Sort.by("dateOfNotication").descending());
+            Page<Notification> notifications = notificationRepo.findByUserId(userId,pageable);
+            if (pageNo >= notifications.getTotalPages()) {
+                throw new RuntimeException("No more pages");
+            }
+            List<Notification> content = notifications.getContent();
+            return new NotificationResponse(
+                     content
+                    ,notifications.getNumber()
+                    ,notifications.getSize()
+                    ,notifications.getNumberOfElements()
+                    ,notifications.getTotalPages()
+                    ,notifications.isLast()
+            );
     }
     public String getProfileImage(Integer userId) {
         Optional<User> findUser = userRepo.findById(userId);
@@ -101,7 +124,7 @@ public class UserService {
                         }
                     }
                 }   if (userDetailsEdit.getPassword() != null && !userDetailsEdit.getPassword().isBlank()) {
-                    findUser.get().setPassword(userDetailsEdit.getPassword());
+                    findUser.get().setPassword(passwordEncoder.encode(userDetailsEdit.getPassword()));
                 }
             }
             userRepo.save(findUser.get());
@@ -173,41 +196,94 @@ public class UserService {
     }
 
 
+    @Transactional
     public String createOrder(CreateOrder createOrder){
-        User user = userRepo.findById(createOrder.getUserId()).get();
-        Order order = new Order();
-        order.setUser(user);
-        order.setCreatedAt(LocalDateTime.now());
-        order.setShippingAddress(createOrder.getShippingAddress());
-        order.setTotalPrice(createOrder.getTotalPrice());
-        order.setStatus("PENDING");
-        orderRepo.save(order);
+        User user = userRepo.findById(createOrder.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+        PaymentsMethod paymentsMethod = paymentsMethodRepo.findById(createOrder.getCardId()).get();
+            Order order = new Order();
+            order.setUser(user);
+            order.setPaymentsMethod(paymentsMethod);
+            order.setCreatedAt(LocalDateTime.now());
+            if (createOrder.getShippingAddress() != null && !createOrder.getShippingAddress().isBlank()) {
+                order.setShippingAddress(createOrder.getShippingAddress());
+            } else {
+                throw new RuntimeException("Shipping address not found!");
+            }
+            if (createOrder.getPhoneNumber() != null && !createOrder.getPhoneNumber().isBlank()) {
+                order.setContactNumber(createOrder.getPhoneNumber());
+            } else {
+                order.setContactNumber(user.getPhoneNumber());
+            }
+            order.setTotalPrice(createOrder.getTotalPrice());
+            order.setStatus("PENDING");
+            orderRepo.save(order);
 
-
-        for (ProductShippingDetails product : createOrder.getProducts()) {
-            Product findProduct = productRepo.findById(product.getProductId()).get();
-            OrderedProducts orderedProducts = new OrderedProducts();
-            orderedProducts.setOrder(order);
-            orderedProducts.setUser(user);
-            orderedProducts.setProduct(findProduct);
-            orderedProducts.setQuantity(product.getQuantity());
-            orderedProductsRepo.save(orderedProducts);
+            if(createOrder.getProducts().isEmpty()){
+                throw new RuntimeException("Product list is empty!");
+            }
+            for (ProductShippingDetails product : createOrder.getProducts()) {
+                Product findProduct = productRepo.findById(product.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
+                OrderedProducts orderedProducts = new OrderedProducts();
+                orderedProducts.setOrder(order);
+                orderedProducts.setUser(user);
+                orderedProducts.setProduct(findProduct);
+                orderedProducts.setQuantity(product.getQuantity());
+                orderedProductsRepo.save(orderedProducts);
         }
+
+            Notification notification = new Notification();
+            notification.setUser(user);
+            notification.setMessage(NotificationMessage.ORDER.getMessage());
+            notification.setDateOfNotication(LocalDateTime.now());
+            notificationRepo.save(notification);
+
         return "Successfully created";
     }
-    public List<OrderDto> getOrders(Integer userId) {
+    public OrderResponse getOrders(int userId,int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo,pageSize);
+        User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Page<Order> getOrders = orderRepo.findByUserAndStatus(user,"PENDING", pageable);
+        if (pageNo >= getOrders.getTotalPages()) {
+            throw new RuntimeException("Out of pages");
+        }
+        List<OrderDto> orderDto = getOrders.stream().map(order -> OrderDto.formOrder(order)).toList();
+        return new OrderResponse(orderDto,getOrders.getNumber(),getOrders.getSize(),getOrders.getNumberOfElements(),getOrders.getTotalPages(),getOrders.isLast());
+    }
+
+    public List<Product> getProduct(Integer orderId) {
+        return  orderedProductsRepo.findByOrderId(orderId).stream().map(orderedProducts -> orderedProducts.getProduct()).collect(Collectors.toList());
+    }
+    public PaymentsMethod addPaymentMethod(CreatePayment createPayment){
+        User user = userRepo.findById(createPayment.getUserId()).get();
+
+        PaymentsMethod paymentsMethod = new PaymentsMethod();
+
+        paymentsMethod.setCardHolderName(createPayment.getCardHolderName());
+        paymentsMethod.setCardNumber(createPayment.getCardNumber());
+        paymentsMethod.setExDate(createPayment.getExDate());
+        paymentsMethod.setTypeOfCard(createPayment.getTypeOfCard());
+        paymentsMethod.setCvv(createPayment.getCvv());
+        paymentsMethod.setUser(user);
+        paymentsMethodRepo.save(paymentsMethod);
+
+        Notification notification = new Notification();
+        notification.setUser(user);
+        notification.setMessage(NotificationMessage.ADDED_CARD.getMessage());
+        notification.setDateOfNotication(LocalDateTime.now());
+        notificationRepo.save(notification);
+
+        return paymentsMethod;
+    }
+
+    public List<PaymentsMethod> getYourPayments(Integer userId) {
         User user = userRepo.findById(userId).get();
-        return orderRepo.findByUserAndStatus(user,"PENDING").stream().map(order -> new OrderDto(
-                order.getId(),
-                order.getCreatedAt(),
-                order.getShippingAddress(),
-                order.getTotalPrice(),
-                order.getStatus()))
-                .collect(Collectors.toList());
-    }
+        return paymentsMethodRepo.findByUserId(user.getId());
+   }
 
-    public List<Product> getProduct(Integer userId) {
-        return  orderedProductsRepo.findByUserId(userId).stream().map(orderedProducts -> orderedProducts.getProduct()).collect(Collectors.toList());
+    public PaymentsMethod removeCreditCard( int cardId, int userId) {
+        PaymentsMethod paymentsMethod = paymentsMethodRepo.findByIdAndUserId(cardId,userId)
+                .orElseThrow(() -> new RuntimeException("Card not found"));
+        paymentsMethodRepo.delete(paymentsMethod);
+        return paymentsMethod;
     }
-
 }

@@ -37,7 +37,7 @@ export const ProductPage = () => {
 
     async function fetchProducts() {
         try {
-            const response = await fetch('http://localhost:8080/api/products', {
+            const response = await fetch('http://localhost:8080/api/products/products', {
                 method: 'GET',
                 credentials: 'include'
             });
@@ -55,7 +55,7 @@ export const ProductPage = () => {
 
     async function getProductImages() {
         try {
-            const response = await fetch('http://localhost:8080/api/productMainImage', {
+            const response = await fetch('http://localhost:8080/api/products/productMainImage', {
                 method: 'GET',
                 headers: {
                     'Content-type': 'application/json',

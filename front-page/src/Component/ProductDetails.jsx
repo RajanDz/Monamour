@@ -19,7 +19,7 @@ export const ProductDetails = () => {
 
     async function fetchProductDetails() {
         try {
-            const response = await fetch(`http://localhost:8080/api/findProduct/${id}`,{
+            const response = await fetch(`http://localhost:8080/api/products/findProduct/${id}`,{
                 method: 'GET',
                 credentials: 'include'
             })
@@ -43,7 +43,7 @@ export const ProductDetails = () => {
 
     async function fetchProductImages() {
         try {
-            const response = await fetch(`http://localhost:8080/api/productsImage/${id}`, {
+            const response = await fetch(`http://localhost:8080/api/products/productsImage/${id}`, {
                 method: 'GET',
                 credentials: 'include'
             })
