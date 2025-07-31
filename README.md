@@ -1,4 +1,12 @@
-BACKEND -> AdminManager/monamour/src/main/java/com/monamour/monamour
+## Backend lokacija
+
+Ovaj projekat sadrži i frontend i backend.
+
+🔧 **Backend** se nalazi u folderu:  
+`AdminManager/monamour/src/main/java/com/monamour/monamour`  
+[Klik za direktan pristup](./AdminManager/monamour/src/main/java/com/monamour/monamour)
+
+👇 U nastavku se nalazi standardni opis React frontenda.
 
 
 
