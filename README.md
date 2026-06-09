@@ -6,8 +6,183 @@ Ovaj projekat sadrži i frontend i backend.
 `AdminManager/monamour/src/main/java/com/monamour/monamour`  
 [Klik za direktan pristup](./AdminManager/monamour/src/main/java/com/monamour/monamour)
 
-👇 U nastavku se nalazi standardni opis React frontenda.
+# MonAmour - E-Commerce Management System
 
+MonAmour is a full-stack e-commerce management application built with Spring Boot and React. The system provides user management, role administration, product management, image handling, and activity tracking functionalities.
+
+## Features
+
+### User Management
+- User registration and login
+- User profile management
+- Profile image support
+- Search users by ID, email, first name, or last name
+- User activity tracking
+- Registration statistics
+
+### Role Management
+- Assign roles to users
+- Remove roles from users
+- View available roles for assignment
+- User permission management
+
+### Product Management
+- Create products
+- Edit product details
+- Soft delete products
+- Bulk product deletion
+- Product image gallery
+- Multiple product images per product
+- Default product image selection
+- Replace existing product images
+
+### Activity Logging
+- Product deletion tracking
+- Bulk deletion tracking
+- User action history
+- Administrative audit logs
+
+### Media Management
+- Product image upload
+- Profile image handling
+- Base64 image conversion
+- Main image selection
+- Gallery management
+
+---
+
+## Technologies
+
+### Backend
+- Java
+- Spring Boot
+- Spring Data JPA
+- Hibernate
+- MySQL
+
+### Frontend
+- React
+- JavaScript
+- HTML
+- CSS
+
+### Tools
+- Postman
+- Git
+- GitHub
+
+---
+
+## Architecture
+
+The application follows a layered architecture:
+
+- Controller Layer
+- Service Layer
+- Repository Layer
+- Database Layer
+
+This structure improves maintainability, scalability, and separation of concerns.
+
+---
+
+## Core Modules
+
+### User Module
+
+- User registration
+- User authentication
+- Profile management
+- Activity monitoring
+- Monthly registration analytics
+
+### Product Module
+
+- Product creation
+- Product updates
+- Product image management
+- Soft deletion
+- Product administration
+
+### Administration Module
+
+- Role management
+- User search system
+- Product activity logs
+- Bulk product operations
+
+---
+
+## Database Design
+
+### User
+- id
+- name
+- lastname
+- email
+- password
+- phoneNumber
+- gender
+- profileImage
+
+### Role
+- id
+- name
+
+### Product
+- id
+- name
+- color
+- size
+- price
+- isDeleted
+
+### ProductImage
+- id
+- imagePath
+- isMain
+
+### UserLog
+- registrationDate
+- lastLoginDate
+
+### ProductsActivityLog
+- action
+- reason
+- timestamp
+
+---
+
+## Implemented Concepts
+
+- One-to-Many Relationships
+- Many-to-Many Relationships
+- Soft Delete Pattern
+- Audit Logging
+- File Upload Management
+- Image Processing
+- User Role Management
+- Administrative Operations
+- Custom Filtering and Search
+
+---
+
+## Future Improvements
+
+- Spring Security
+- JWT Authentication
+- Shopping Cart
+- Order Management
+- Payment Integration
+- Docker Support
+- AWS Deployment
+- Email Notifications
+
+---
+
+## Author
+
+**Rajan Dz**
 
 
 
